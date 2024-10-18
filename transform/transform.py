@@ -1,13 +1,17 @@
-# import os
-# # print (os.getcwd())
+# os
+import os
+print(os.getcwd())
 
-# load output file
+# load extracted output file
 import csv
-with open("./sample_output.csv", "r") as f:
-    reader = csv.reader(f, delimiter="\t")
-    for i, line in enumerate(reader):
-        print("line[{}] = {}".format(i, line))
+with open("/home/pafr/repos/personal_finance_tracker/transform/sample_output.csv", "r") as f:
+    reader = csv.reader(f, delimiter="|")
+    for i, line_list in enumerate(reader):
+        removed_space_list = [line.strip() for line in line_list]
+        print(removed_space_list)
 
-# cluster table in proper format
+# cluster table into proper format
+# -> Remove first 2 lines
+# -> Delimiter: Pipe
 
 # assign expense to corresponding category
