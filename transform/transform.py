@@ -1,19 +1,29 @@
 import csv
+import pandas as pd
 
-# Initialization of DataFrame variables
-rows = []
+# Define the DataFrame column names
+columns = ['Datum', 'Transaktionstyp', 'Begünstigter/Zahlungspflichtiger', 'IBAN', 'Betrag', 'Währung', 'Verwendungszweck', 'Kontostand nach Buchung']
 
-# @@@ create pandas frame and add items except for the first time
-# Load extracted output file
-with open("/home/pafr/repos/personal_finance_tracker/transform/sample_output.csv", "r") as f:
-    reader = csv.reader(f, delimiter="|")
+# Initialize an empty DataFrame with the appropriate columns
+df = pd.DataFrame(columns=columns)
+
+# Open and read the file progressively
+with open("/home/pafr/repos/personal_finance_tracker/transform/sample_output.csv", "r") as file:
+    reader = csv.reader(file, delimiter="|")
+
+    # Skip the first two lines
+    next(reader)
+    next(reader)
+
     for current_line_list in reader:
-        # removing 
+        # Removing leading and trailing space
         stripped_line = [line.strip() for line in current_line_list]
-        rows.append()
-
-# ---> @@@ : create DataFrame at beginning and instantly append to the frame isntead of making more lists
         
+        # Append the cleaned data to the DataFrame
+        df.loc[len(df)] = stripped_line  # Appends row to the DataFrame
+
+        
+
 
 # @ cluster table into proper format
 # -> Remove first 2 lines
