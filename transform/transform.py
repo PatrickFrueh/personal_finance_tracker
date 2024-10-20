@@ -22,11 +22,12 @@ with open("/home/pafr/repos/personal_finance_tracker/transform/sample_output.csv
         # Append the cleaned data to the DataFrame
         df.loc[len(df)] = stripped_line  # Appends row to the DataFrame
 
-        
 
+# @@@ assign expense to corresponding category
 
-# @ cluster table into proper format
-# -> Remove first 2 lines
-# -> Delimiter: Pipe
+# check for keywords
+# -> assign relevant keywords: use an external file to keep it maintable, even for non-coding people
+# yaml? easy to read, first in contact with file type
 
-# @ assign expense to corresponding category
+# -> flag keywords that aren't assigned and need to be added
+# ??? later on: add ai categorization
