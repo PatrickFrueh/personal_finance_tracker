@@ -1,0 +1,12 @@
+{
+    "beschreibung_schluesselwoerter": {
+      "Miete": ["miete", "wohnung", "apartment"],
+      "Freizeit": ["netflix", "spotify", "kino", "gaming"],
+      "Ausgaben": ["strom", "telefon", "versicherung", "einkaufen"]
+    },
+    "empfaenger_schluesselwoerter": {
+      "Miete": ["max mustermann", "vermieter", "hausverwaltung"],
+      "Freizeit": ["spotify", "netflix", "game store"],
+      "Ausgaben": ["energieanbieter", "versicherung", "telekommunikationsanbieter"]
+    }
+  }
