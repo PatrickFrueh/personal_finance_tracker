@@ -58,3 +58,4 @@ def categorize_transaction(row):
 # Apply the *new* categorization function to each row of the DataFrame
 df['Kategorie'] = df.apply(categorize_transaction, axis=1)
 
+# @ Future features: Add categories using chatgpt / matain every X weeks: collect "Unkategorisiert"
