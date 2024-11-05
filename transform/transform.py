@@ -25,8 +25,6 @@ with open("/home/pafr/repos/personal_finance_tracker/transform/sample_output.csv
         df.loc[len(df)] = stripped_line  # Appends row to the DataFrame
 
 
-print(df)
-
 # # Categorize transactions
 # Load the keywords from the JSON file
 with open("/home/pafr/repos/personal_finance_tracker/transform/categories.json", "r") as file:
