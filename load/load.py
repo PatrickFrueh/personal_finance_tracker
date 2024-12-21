@@ -1,32 +1,38 @@
-from ..transform.transform_encapsulated import categorize_bank_transactions
+# from ..transform.transform_encapsulated import categorize_bank_transactions
 
-df_categorized = categorize_bank_transactions(
-    csv_filepath="/home/pafr/repos/personal_finance_tracker/transform/sample_output.csv",
-    json_filepath="/home/pafr/repos/personal_finance_tracker/transform/categories.json"
-)
+# df_categorized = categorize_bank_transactions(
+#     csv_filepath="/home/pafr/repos/personal_finance_tracker/transform/sample_output.csv",
+#     json_filepath="/home/pafr/repos/personal_finance_tracker/transform/categories.json"
+# )
 
 # # Optionally, save the DataFrame to a new CSV if needed
 # df_categorized.to_csv("/path/to/output_categorized.csv", index=False)
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-# import mysql.connector
+from dotenv import load_dotenv
+import os
+import mysql.connector
 
-# # Database configuration
-# config = {
-#     'user': 'patrick',
-#     'password': 'Bazinga27@',
-#     'host': 'localhost',
-#     'database': 'expenses_database'
-# }
+# Find .env-file
+load_dotenv()
 
-# # Connect to the database
-# try:
-#     connection = mysql.connector.connect(**config)
-#     if connection.is_connected():
-#         print("Connected to MySQL database")
+# Database configuration
+# Store the configuration in a dictionary
+config = {
+    'user': os.getenv('DB_USER'),
+    'password': os.getenv('DB_PASSWORD'),
+    'host': os.getenv('DB_HOST'),
+    'database': os.getenv('DB_NAME')
+}
 
-# except mysql.connector.Error as err:
-#     print(f"Error: {err}")
+# Connect to the database
+try:
+    connection = mysql.connector.connect(**config)
+    if connection.is_connected():
+        print("Connected to MySQL database")
+
+except mysql.connector.Error as err:
+    print(f"Error: {err}")
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
