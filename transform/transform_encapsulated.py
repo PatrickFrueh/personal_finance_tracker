@@ -2,7 +2,7 @@ import csv
 import pandas as pd
 import json
 
-def categorize_bank_transactions(csv_filepath, json_filepath):
+def categorize_bank_transactions(bank_data_filepath, categories_filepath):
     # Define the DataFrame column names
     columns = ['Datum', 'Transaktionstyp', 'Begünstigter/Zahlungspflichtiger', 'IBAN', 'Betrag', 'Währung', 'Verwendungszweck', 'Kontostand nach Buchung']
     
@@ -10,7 +10,7 @@ def categorize_bank_transactions(csv_filepath, json_filepath):
     df = pd.DataFrame(columns=columns)
     
     # Read and process the CSV file
-    with open(csv_filepath, "r") as file:
+    with open(bank_data_filepath, "r") as file:
         reader = csv.reader(file, delimiter="|")
         
         # Skip the first two lines
@@ -23,7 +23,7 @@ def categorize_bank_transactions(csv_filepath, json_filepath):
             df.loc[len(df)] = stripped_line  # Append row to DataFrame
     
     # Load the categorization keywords from the JSON file
-    with open(json_filepath, "r") as file:
+    with open(categories_filepath, "r") as file:
         categories = json.load(file)
     
     # Separate the description and recipient keyword lists
