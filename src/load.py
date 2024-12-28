@@ -1,13 +1,13 @@
-from transform.transform_encapsulated import categorize_bank_transactions
+from transform_encapsulated import categorize_bank_transactions
 
 # @@@ Load up the categorized data
 df_categorized = categorize_bank_transactions(
-    bank_data_filepath="/home/pafr/repos/personal_finance_tracker/transform/sample_output.csv",
-    categories_filepath="/home/pafr/repos/personal_finance_tracker/transform/categories.json"
+    bank_data_filepath="/home/pafr/repos/personal_finance_tracker/samples/sample_bank_data.csv",
+    categories_filepath="/home/pafr/repos/personal_finance_tracker/.config/categories.json"
 )
 
 # Optionally, save the DataFrame to a new CSV if needed
-df_categorized.to_csv("/path/to/output_categorized.csv", index=False)
+df_categorized.to_csv("/home/pafr/repos/personal_finance_tracker/samples/output_categorized.csv", index=False)
 print(df_categorized)
 
 

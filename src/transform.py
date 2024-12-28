@@ -10,7 +10,7 @@ columns = ['Datum', 'Transaktionstyp', 'Begünstigter/Zahlungspflichtiger', 'IBA
 df = pd.DataFrame(columns=columns)
 
 # Open and read the file progressively
-with open("/home/pafr/repos/personal_finance_tracker/transform/sample_output.csv", "r") as file:
+with open("/home/pafr/repos/personal_finance_tracker/samples/sample_bank_data.csv", "r") as file:
     reader = csv.reader(file, delimiter="|")
 
     # Skip the first two lines
@@ -27,7 +27,7 @@ with open("/home/pafr/repos/personal_finance_tracker/transform/sample_output.csv
 
 # # Categorize transactions
 # Load the keywords from the JSON file
-with open("/home/pafr/repos/personal_finance_tracker/transform/categories.json", "r") as file:
+with open("/home/pafr/repos/personal_finance_tracker/.config/categories.json", "r") as file:
     categories = json.load(file)
 
 # Separate the description and recipient keyword lists
