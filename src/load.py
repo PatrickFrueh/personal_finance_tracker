@@ -1,4 +1,4 @@
-from transform_encapsulated import categorize_bank_transactions
+from transform import categorize_bank_transactions
 
 # @@@ Load up the categorized data
 df_categorized = categorize_bank_transactions(
