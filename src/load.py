@@ -1,41 +1,51 @@
 from transform import categorize_bank_transactions
 
-# @@@ Load up the categorized data
-df_categorized = categorize_bank_transactions(
-    bank_data_filepath="/home/pafr/repos/personal_finance_tracker/samples/sample_bank_data.csv",
-    categories_filepath="/home/pafr/repos/personal_finance_tracker/.config/categories.json"
-)
-
-# Optionally, save the DataFrame to a new CSV if needed
-df_categorized.to_csv("/home/pafr/repos/personal_finance_tracker/samples/output_categorized.csv", index=False)
-print(df_categorized)
-
+# # Load up the categorized data
+# df_categorized = categorize_bank_transactions(
+#     bank_data_filepath="/home/pafr/repos/personal_finance_tracker/samples/sample_bank_data.csv",
+#     categories_filepath="/home/pafr/repos/personal_finance_tracker/.config/categories.json"
+# )
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-# from dotenv import load_dotenv
-# import os
-# import mysql.connector
+from dotenv import load_dotenv
+import os
+import mysql.connector
+from mysql.connector import Error
 
-# # Find .env-file
-# load_dotenv()
+# Find .env-file
+load_dotenv(dotenv_path=".config/.env")
 
-# # Database configuration
-# # Store the configuration in a dictionary
-# config = {
-#     'user': os.getenv('DB_USER'),
-#     'password': os.getenv('DB_PASSWORD'),
-#     'host': os.getenv('DB_HOST'),
-#     'database': os.getenv('DB_NAME')
-# }
+# Database configuration
+# Store the configuration in a dictionary
+config = {
+    'host': os.getenv('RDS_ENDPOINT'),
+    'user': os.getenv('DB_USER'),
+    'password': os.getenv('DB_PASSWORD'),
+    'database': os.getenv('DB_NAME'),
+    'port': os.getenv('DEFAULT_PORT')
+}
 
-# # Connect to the database
-# try:
-#     connection = mysql.connector.connect(**config)
-#     if connection.is_connected():
-#         print("Connected to MySQL database")
+# Connect to the database
+try:
+    connection = mysql.connector.connect(**config)
+    if connection.is_connected():
+        print("Connected to MySQL database")
 
-# except mysql.connector.Error as err:
-#     print(f"Error: {err}")
+        # Run a test query
+        cursor = connection.cursor()
+        cursor.execute("SELECT DATABASE();")
+        record = cursor.fetchone()
+        print("You're connected to:", record[0])
+
+except Error as e:
+    print("Error while connecting to MySQL", e)
+
+finally:
+    # Close the connection
+    if 'connection' in locals() and connection.is_connected():
+        cursor.close()
+        connection.close()
+        print("MySQL connection is closed")
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
