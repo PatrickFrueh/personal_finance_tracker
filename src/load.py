@@ -22,7 +22,7 @@ config = {
     'user': os.getenv('DB_USER'),
     'password': os.getenv('DB_PASSWORD'),
     'database': os.getenv('DB_NAME'),
-    'port': os.getenv('DEFAULT_PORT')
+    'port': int(os.getenv('DEFAULT_PORT'))
 }
 
 # Connect to the database
