@@ -4,18 +4,18 @@ import json
 
 def categorize_bank_transactions(bank_data_filepath, categories_filepath):
     # Define the DataFrame column names
-    columns = ['Datum', 'Transaktionstyp', 'Begünstigter/Zahlungspflichtiger', 'IBAN', 'Betrag', 'Währung', 'Verwendungszweck', 'Kontostand nach Buchung']
+    columns = ['Buchung', 'Valuta', 'Auftraggeber/Empfänger', 'Buchungstext', 'Verwendungszweck', 'Saldo', 'Währung', 'Betrag', 'Währung']
     
     # Initialize an empty DataFrame with the appropriate columns
     df = pd.DataFrame(columns=columns)
     
     # Read and process the CSV file
-    with open(bank_data_filepath, "r") as file:
-        reader = csv.reader(file, delimiter="|")
+    with open(bank_data_filepath, "r", encoding="ISO-8859-1") as file:
+        reader = csv.reader(file, delimiter=";")
         
-        # Skip the first two lines
-        next(reader)
-        next(reader)
+        # Skip the first 13 lines
+        for _ in range(13):
+            next(reader)
         
         # Append each cleaned line to the DataFrame
         for current_line_list in reader:
@@ -33,7 +33,7 @@ def categorize_bank_transactions(bank_data_filepath, categories_filepath):
     # Define an internal function for categorizing a transaction row
     def categorize_transaction(row):
         description = row['Verwendungszweck'].lower()
-        recipient = row['Begünstigter/Zahlungspflichtiger'].lower()
+        recipient = row['Auftraggeber/Empfänger'].lower()
 
         # Check description-based keywords
         for category, keywords in description_keywords.items():
