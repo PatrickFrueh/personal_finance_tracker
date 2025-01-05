@@ -14,7 +14,7 @@ def categorize_bank_transactions(bank_data_filepath, categories_filepath):
         reader = csv.reader(file, delimiter=";")
         
         # Skip the first 13 lines
-        for _ in range(13):
+        for _ in range(14):
             next(reader)
         
         # Append each cleaned line to the DataFrame
