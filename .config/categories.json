@@ -1,12 +1,15 @@
 {
     "beschreibung_schluesselwoerter": {
-      "Miete": ["miete", "wohnung", "apartment"],
+      "Fixkosten": ["miete", "wohnung", "apartment"],
+      "Lebensmittel + Haushalt": [],
       "Freizeit": ["netflix", "spotify", "kino", "gaming"],
       "Ausgaben": ["strom", "telefon", "versicherung", "einkaufen"]
     },
     "empfaenger_schluesselwoerter": {
-      "Miete": ["max mustermann", "vermieter", "hausverwaltung"],
-      "Freizeit": ["spotify", "netflix", "game store"],
-      "Ausgaben": ["energieanbieter", "versicherung", "telekommunikationsanbieter"]
+      "Fixkosten": ["max mustermann", "vermieter", "hausverwaltung", "db", "aok", "fitness", "e-plus"],
+      "Lebensmittel + Haushalt": ["rewe", "penny", "dm", "kaufland", "rossmann", "go asia"],
+      "Freizeit": ["spotify", "netflix", "game store", "tedi"],
+      "Ausgaben": ["energieanbieter", "versicherung", "telekommunikationsanbieter"],
+      "Essen: Auswärts": ["burger king", "mcdonalds", "baeckerei", "backwerk", "subway", "backwaren"]
     }
   }

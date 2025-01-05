@@ -9,5 +9,7 @@ def main():
     categories_filepath="/home/pafr/repos/personal_finance_tracker/.config/categories.json"
 )
 
+    print(categorized_data)
+    
 if __name__ == "__main__":
     main()
