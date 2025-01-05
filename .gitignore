@@ -7,3 +7,5 @@ folder_structure.txt
 cmd-command_fuer_aws.txt
 
 Umsatzanzeige_DE23500105175435590236_20250104.csv
+
+__pycache__/
