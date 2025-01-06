@@ -3,17 +3,40 @@ import pandas as pd
 import json
 
 def categorize_bank_transactions(bank_data_filepath, categories_filepath):
-    # Define the DataFrame column names
-    columns = ['Buchung', 'Valuta', 'Auftraggeber/Empfänger', 'Buchungstext', 'Verwendungszweck', 'Saldo', 'Währung', 'Betrag', 'Währung']
+    """
+    Categorizes bank transactions based on description and recipient keywords.
+
+    This function reads transaction data from a CSV file, cleans the data, and categorizes
+    each transaction based on pre-defined keywords for descriptions and recipients. 
+    The categorization is based on matching keywords from two sets: description and recipient keywords.
     
-    # Initialize an empty DataFrame with the appropriate columns
+    Parameters:
+    bank_data_filepath (str): 
+        The path to the CSV file containing the bank transaction data. 
+        The file should have transaction records with specific columns such as 'Verwendungszweck' and 'Auftraggeber/Empfänger'.
+    categories_filepath (str): 
+        The path to the JSON file containing categorization keywords. The JSON file should have two lists:
+        - 'beschreibung_schluesselwoerter' for description-based keywords
+        - 'empfaenger_schluesselwoerter' for recipient-based keywords
+
+    Returns:
+    pd.DataFrame: 
+        A DataFrame with an additional column 'Kategorie', indicating the category for each transaction.
+
+    Example:
+    >>> categorized_df = categorize_bank_transactions('bank_data.csv', 'categories.json')
+    """
+
+    # Define the DataFrame column names
+    # Initialize an empty DataFrame with the defined column names
+    columns = ['Buchung', 'Valuta', 'Auftraggeber/Empfänger', 'Buchungstext', 'Verwendungszweck', 'Saldo', 'Währung', 'Betrag', 'Währung']
     df = pd.DataFrame(columns=columns)
     
     # Read and process the CSV file
     with open(bank_data_filepath, "r", encoding="ISO-8859-1") as file:
         reader = csv.reader(file, delimiter=";")
         
-        # Skip the first 13 lines
+        # Skip the first 13 lines: header and irrelevant lines
         for _ in range(14):
             next(reader)
         
@@ -33,15 +56,25 @@ def categorize_bank_transactions(bank_data_filepath, categories_filepath):
     
     # Define an internal function for categorizing a transaction row
     def categorize_transaction(row):
+        """
+        Categorizes a single transaction row based on description and recipient keywords.
+
+        Parameters:
+        row (pd.Series): A row from the DataFrame representing a bank transaction.
+
+        Returns:
+        str: The category for the transaction.
+        """
+
         description = row['Verwendungszweck'].lower()
         recipient = row['Auftraggeber/Empfänger'].lower()
 
-        # Check description-based keywords
+        # Check for a match based on description keywords
         for category, keywords in description_keywords.items():
             if any(keyword in description for keyword in keywords):
                 return category
         
-        # Check recipient-based keywords
+        # Check for a match based on recipient keywords
         for category, keywords in recipient_keywords.items():
             if any(keyword in recipient for keyword in keywords):
                 return category
@@ -51,12 +84,34 @@ def categorize_bank_transactions(bank_data_filepath, categories_filepath):
     
     # Apply categorization to each row in the DataFrame
     df['Kategorie'] = df.apply(categorize_transaction, axis=1)
-    
-    # Return the categorized DataFrame for further use
+
     return df
 
 
 def cleanup_bank_dataframe(categorized_bank_dataframe, columns_to_drop_filepath, bank_name):
+    """
+    Cleans up the given DataFrame by removing the columns specified for the given bank.
+
+    This function removes the irrelevant columns from the provided DataFrame based on 
+    a JSON configuration file. The columns to be removed are specific to each bank, 
+    determined by the bank name provided.
+
+    Parameters:
+    categorized_bank_dataframe (pd.DataFrame): 
+        The DataFrame containing the bank transaction data that needs to be cleaned.
+    columns_to_drop_filepath (str): 
+        The file path to the JSON file that specifies the columns to drop for each bank.
+        The JSON file should map bank names to a list of column names to be removed.
+    bank_name (str): 
+        The name of the bank with corresponding columns that should be removed from the DataFrame.
+
+    Returns:
+    pd.DataFrame: 
+        A cleaned DataFrame with the specified columns removed based on the provided bank name.
+
+    Example:
+    >>> df_cleaned = cleanup_bank_dataframe(categorized_df, 'columns_to_drop.json', 'ING DiBa')
+    """
 
     # Dataframe to be cleaned up
     df = categorized_bank_dataframe
