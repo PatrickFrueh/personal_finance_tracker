@@ -54,3 +54,21 @@ def categorize_bank_transactions(bank_data_filepath, categories_filepath):
     
     # Return the categorized DataFrame for further use
     return df
+
+
+def cleanup_bank_dataframe(categorized_bank_dataframe, columns_to_drop_filepath, bank_name):
+
+    # Dataframe to be cleaned up
+    df = categorized_bank_dataframe
+
+    # Open file to determine relevant columns to drop (dependent on bank)
+    with open(columns_to_drop_filepath, "r") as file:
+        columns_to_drop_data = json.load(file)
+
+    # Extract column names to drop for the specified bank name
+    columns_to_drop = columns_to_drop_data.get(bank_name, [])
+
+    # Drop unwanted columns
+    df = df.drop(columns=columns_to_drop)
+
+    return df
