@@ -27,6 +27,7 @@ def categorize_bank_transactions(bank_data_filepath, categories_filepath):
         categories = json.load(file)
     
     # Separate the description and recipient keyword lists
+    # Recipient-values override description-values in case of conflicts
     description_keywords = categories['beschreibung_schluesselwoerter']
     recipient_keywords = categories['empfaenger_schluesselwoerter']
     
