@@ -1,0 +1,5 @@
+{
+    "ING DiBa": ["Valuta", "Buchungstext", "Saldo", "Währung"],
+    "Kreissparkasse": ["Valuta", "Saldo", "Buchungstext", "Zweite Währung"],
+    "Deutsche Bank": ["Valuta", "Saldo", "Währung", "Notizfeld"]
+}
