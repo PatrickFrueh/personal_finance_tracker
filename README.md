@@ -1,4 +1,4 @@
-Personal finance tracker using the following the functions:
+Personal finance tracker using the following functions:
 
 1. Extract: Collect financial data from APIs
 2. Transform: Process this data
