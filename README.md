@@ -6,3 +6,5 @@ Personal finance tracker using the following functions:
 4. Visualization: Daily/Weekly visual reports on spending habits
 5. Jenkin integration: Automate pipeline
 6. Bottleneck id: Track biggest expenses
+
+⭐
