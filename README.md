@@ -7,4 +7,4 @@ Personal finance tracker using the following functions:
 5. Jenkin integration: Automate pipeline
 6. Bottleneck id: Track biggest expenses
 
-⭐⭐
+⭐⭐⭐
