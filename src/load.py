@@ -26,7 +26,7 @@ df = pd.DataFrame({
     'Auftraggeber/Empfänger': ['ING', 'Fabian Constantin Fruh'],
     'Verwendungszweck': ['GIROCARD 280000168540 MONATLICHES ENTGELT GIROCARD (DEBITKARTE)', 'Crunchyroll'],
     'Betrag': [-1.49, 2.5],
-    'Kategorie': ['Unkategorisiert', 'Unkategorisiert']
+    'Kategorie': ['Unkategorisiert', 'Verteilung']
     })
 
 # Connect to the database
@@ -44,7 +44,7 @@ try:
             auftraggeber_empfaenger VARCHAR(255) NOT NULL,
             verwendungszweck TEXT NOT NULL,
             betrag DECIMAL(10, 2) NOT NULL,
-            kategorie VARCHAR(255) DEFAULT 'Unkategorisiert'
+            kategorie VARCHAR(255)
         );
         """
         cursor.execute(create_table_query)
@@ -55,7 +55,6 @@ try:
             select_query = """
             SELECT COUNT(*) FROM transactions
             WHERE buchung = %s AND auftraggeber_empfaenger = %s AND verwendungszweck = %s
-            AND kategorie = 'Unkategorisiert'
             """
             cursor.execute(select_query, (row['Buchung'], row['Auftraggeber/Empfänger'], row['Verwendungszweck']))
             count = cursor.fetchone()[0]
@@ -66,7 +65,6 @@ try:
                 UPDATE transactions
                 SET kategorie = %s
                 WHERE buchung = %s AND auftraggeber_empfaenger = %s AND verwendungszweck = %s
-                AND kategorie = 'Unkategorisiert'
                 """
                 cursor.execute(update_query, (row['Kategorie'], row['Buchung'], row['Auftraggeber/Empfänger'], row['Verwendungszweck']))
                 print(f"Updated category for transaction: {row['Buchung']} - {row['Auftraggeber/Empfänger']}")
@@ -92,5 +90,3 @@ finally:
         cursor.close()
         connection.close()
         print("MySQL connection is closed")
-
-# @@@ Write df to MySQL DB
