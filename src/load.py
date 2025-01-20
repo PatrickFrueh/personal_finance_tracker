@@ -15,17 +15,39 @@ config = {
     'port': int(os.getenv('DEFAULT_PORT'))
 }
 
+# @@@ Components for the function to come (...)
+# df (categorized data from past step)
+# env-path file (specified data)
+
+# @@@ Test DataFrame
+import pandas as pd
+df = pd.DataFrame({
+    'Buchung': ['2025-01-03', '2025-01-02'],
+    'Auftraggeber/Empfänger': ['ING', 'Fabian Constantin Fruh'],
+    'Verwendungszweck': ['GIROCARD 280000168540 MONATLICHES ENTGELT GIROCARD (DEBITKARTE)', 'Crunchyroll'],
+    'Betrag': [-1.49, 2.5],
+    'Kategorie': ['Unkategorisiert', 'Unkategorisiert']
+    })
+
 # Connect to the database
 try:
     connection = mysql.connector.connect(**config)
     if connection.is_connected():
         print("Connected to MySQL database")
-
-        # Run a test query
         cursor = connection.cursor()
-        cursor.execute("SELECT DATABASE();")
-        record = cursor.fetchone()
-        print("You're connected to:", record[0])
+
+        # Create table (if non existent)
+        create_table_query = """
+        CREATE TABLE IF NOT EXISTS transactions (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            buchung DATE NOT NULL,
+            auftraggeber_empfaenger VARCHAR(255) NOT NULL,
+            verwendungszweck TEXT NOT NULL,
+            betrag DECIMAL(10, 2) NOT NULL,
+            kategorie VARCHAR(255) DEFAULT 'Unkategorisiert'
+        );
+        """
+        cursor.execute(create_table_query)
 
 except Error as e:
     print("Error while connecting to MySQL", e)
