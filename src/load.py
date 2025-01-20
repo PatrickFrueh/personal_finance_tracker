@@ -1,12 +1,3 @@
-from transform import categorize_bank_transactions
-
-# # Load up the categorized data
-# df_categorized = categorize_bank_transactions(
-#     bank_data_filepath="/home/pafr/repos/personal_finance_tracker/samples/sample_bank_data.csv",
-#     categories_filepath="/home/pafr/repos/personal_finance_tracker/.config/categories.json"
-# )
-
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 from dotenv import load_dotenv
 import os
 import mysql.connector
@@ -16,12 +7,11 @@ from mysql.connector import Error
 load_dotenv(dotenv_path=".config/.env")
 
 # Database configuration
-# Store the configuration in a dictionary
 config = {
-    'host': os.getenv('RDS_ENDPOINT'),
-    'user': os.getenv('DB_USER'),
-    'password': os.getenv('DB_PASSWORD'),
-    'database': os.getenv('DB_NAME'),
+    'host': os.getenv('DB_HOST_LOCAL'),
+    'user': os.getenv('DB_USER_LOCAL'),
+    'password': os.getenv('DB_PASSWORD_LOCAL'),
+    'database': os.getenv('DB_NAME_LOCAL'),
     'port': int(os.getenv('DEFAULT_PORT'))
 }
 
@@ -47,12 +37,4 @@ finally:
         connection.close()
         print("MySQL connection is closed")
 
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-
-# @ Import dataframe (result of transform process)
-# @@@ import transform.py, but enter path of bank data + categories.json as arguments
-# -> Result will be a dataframe (categorized + adjusted)
-
-# @ Write df to MySQL DB
-
-# @ Create/Upload to online MySQL DB
+# @@@ Write df to MySQL DB
