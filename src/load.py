@@ -26,7 +26,7 @@ df = pd.DataFrame({
     'Auftraggeber/Empfänger': ['ING', 'Fabian Constantin Fruh'],
     'Verwendungszweck': ['GIROCARD 280000168540 MONATLICHES ENTGELT GIROCARD (DEBITKARTE)', 'Crunchyroll'],
     'Betrag': [-1.49, 2.5],
-    'Kategorie': ['Unkategorisiert', 'Verteilung']
+    'Kategorie': ['Unkategorisiert', 'Mayonaise']
     })
 
 # Connect to the database
