@@ -43,8 +43,26 @@ def categorize_bank_transactions(bank_data_filepath, categories_filepath):
         # Append each cleaned line to the DataFrame
         for current_line_list in reader:
             stripped_line = [line.strip() for line in current_line_list]
-            df.loc[len(df)] = stripped_line  # Append row to DataFrame
-    
+
+            # Append row to DataFrame
+            df.loc[len(df)] = stripped_line
+
+    # Convert and validate date columns
+    for date_col in ['Buchung', 'Valuta']:
+        df[date_col] = pd.to_datetime(df[date_col], format='%d.%m.%Y', errors='coerce')  # Convert to datetime, invalid entries become NaT
+        if df[date_col].isna().any():
+            print(f"Warning: Invalid date entries found in column '{date_col}'")
+
+    # Clean and validate numeric columns
+    numeric_columns = ['Betrag', 'Saldo']
+    for num_col in numeric_columns:
+        if num_col in df.columns:  # Check column existence
+            df[num_col] = df[num_col].str.replace(',', '.', regex=False)  # Replace commas with dots
+            df[num_col] = pd.to_numeric(df[num_col], errors='coerce')  # Convert to numeric, invalid entries become NaN
+            if df[num_col].isna().any():
+                print(f"Warning: Invalid numeric entries found in column '{num_col}'")
+
+
     # Load the categorization keywords from the JSON file
     with open(categories_filepath, "r") as file:
         categories = json.load(file)

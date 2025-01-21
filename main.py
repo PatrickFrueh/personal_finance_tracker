@@ -5,7 +5,7 @@ from src import transform
 from src import load
 
 def main():
-    # 1 - Extract: 
+    # @@@ 1 - Extract: 
 
     # 2 - Transform
     # Transform the extracted data using categories (as DataFrame)
@@ -28,7 +28,8 @@ def main():
     
     # Clean up unwanted columns - specified by bank
     filtered_categorized_bank_data = transform.cleanup_bank_dataframe(categorized_data, "/home/pafr/repos/personal_finance_tracker/.config/exclude_columns_bank.json", "ING DiBa")
-    
+    print(filtered_categorized_bank_data)
+
     # 3 - Load
     # Store data in the local database
     load.process_transactions(filtered_categorized_bank_data, database_credentials, auto_commit=False, overwrite_category=True)
