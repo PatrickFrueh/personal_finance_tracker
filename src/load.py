@@ -61,6 +61,7 @@ def process_transactions(transaction_data, database_credentials, table_name="tra
     >>> process_transactions(transactions, db_credentials, auto_commit=True)
     """
 
+    # Establish a connection to the MySQL database and initialize a cursor if successful.
     try:
         connection = mysql.connector.connect(**database_credentials)
         
