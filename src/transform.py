@@ -14,6 +14,7 @@ def categorize_bank_transactions(bank_data_filepath, categories_filepath):
     bank_data_filepath (str): 
         The path to the CSV file containing the bank transaction data. 
         The file should have transaction records with specific columns such as 'Verwendungszweck' and 'Auftraggeber/Empfänger'.
+        See sample files for an example.
     categories_filepath (str): 
         The path to the JSON file containing categorization keywords. The JSON file should have two lists:
         - 'beschreibung_schluesselwoerter' for description-based keywords
