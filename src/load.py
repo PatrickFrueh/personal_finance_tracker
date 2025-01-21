@@ -3,24 +3,62 @@ import os
 import mysql.connector
 from mysql.connector import Error
 
-
-
-
-
-# @@@ Components for the function to come (...)
-# df (categorized data from past step)
-# env-path file (specified data)
-
 def process_transactions(transaction_data, database_credentials, table_name="transactions", auto_commit=True, overwrite_category=False):
     """
-    Function to insert or update transactions in a MySQL database.
+    Processes bank transactions by inserting or updating records in a MySQL database.
+
+    This function takes categorized transaction data, connects to a specified MySQL database, 
+    and ensures that the transactions are properly inserted or updated. If a transaction already 
+    exists, its category can optionally be updated. If it does not exist, it will be inserted into 
+    the database. The function also allows for automatic or manual commit control.
 
     Parameters:
-    transaction_data (pd.DataFrame): DataFrame containing the transaction data to be processed.
-    database_credentials (dict): Dictionary containing database configuration values (host, user, password, database, port).
-    table_name (str): Name of the table in the database to interact with. Defaults to 'transactions'.
-    auto_commit (bool): Flag to control whether to commit after each row. Defaults to True.
-    overwrite_category (bool): Flag to decide if categories should be updated even if not 'Unkategorisiert'. Defaults to False.
+    transaction_data (pd.DataFrame): 
+        A DataFrame containing the transaction data to be processed. It must have the following columns:
+        - 'Buchung' (DATE): Transaction date.
+        - 'Auftraggeber/Empfänger' (VARCHAR): Transaction sender/recipient.
+        - 'Verwendungszweck' (TEXT): Description of the transaction.
+        - 'Betrag' (DECIMAL): Transaction amount.
+        - 'Kategorie' (VARCHAR): Category of the transaction.
+    database_credentials (dict): 
+        A dictionary containing the MySQL database configuration values. The keys must include:
+        - 'host': The hostname or IP address of the MySQL server.
+        - 'user': The username to connect to the database.
+        - 'password': The password for the given username.
+        - 'database': The name of the database to connect to.
+        - 'port' (optional): The port number for the MySQL server (default is 3306).
+    table_name (str): 
+        The name of the table in the database to interact with. Defaults to 'transactions'.
+    auto_commit (bool): 
+        A flag indicating whether to commit changes after each processed transaction. Defaults to True.
+    overwrite_category (bool): 
+        A flag to decide whether to update the category of existing transactions. If False, only 
+        transactions with the category 'Unkategorisiert' will be updated. Defaults to False.
+
+    Returns:
+    None
+
+    Example:
+    >>> from dotenv import load_dotenv
+    >>> import pandas as pd
+    >>> import os
+    >>> load_dotenv()  # Load environment variables from .env file
+    >>> db_credentials = {
+    >>>     "host": os.getenv("DB_HOST"),
+    >>>     "user": os.getenv("DB_USER"),
+    >>>     "password": os.getenv("DB_PASSWORD"),
+    >>>     "database": os.getenv("DB_NAME"),
+    >>>     "port": int(os.getenv("DB_PORT", 3306))
+    >>> }
+    >>> # Example DataFrame
+    >>> transactions = pd.DataFrame({
+    >>>     "Buchung": ["2025-01-01", "2025-01-02"],
+    >>>     "Auftraggeber/Empfänger": ["John Doe", "Acme Corp"],
+    >>>     "Verwendungszweck": ["Payment for invoice #123", "Subscription fee"],
+    >>>     "Betrag": [100.50, 49.99],
+    >>>     "Kategorie": ["Invoices", "Subscriptions"]
+    >>> })
+    >>> process_transactions(transactions, db_credentials, auto_commit=True)
     """
 
     try:
