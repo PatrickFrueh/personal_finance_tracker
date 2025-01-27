@@ -12,3 +12,5 @@ __pycache__/
 
 cleaned_up_df.csv
 .~lock.cleaned_up_df.csv#
+
+downloaded_transactions.csv
