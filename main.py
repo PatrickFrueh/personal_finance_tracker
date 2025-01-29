@@ -23,13 +23,14 @@ def main():
 
     # Download the CSV file from the mock API
     API_URL = "http://127.0.0.1:5000/download-transactions"  # Mock API URL
-    csv_file_path = "res/downloaded_transactions.csv"  # Where to save the downloaded file
+    transactions_filename = "downloaded_transactions.csv"
+    csv_file_path = f"res/{transactions_filename}"  # Where to save the downloaded file
     extract.download_csv_file(save_path=csv_file_path)
 
     # 2 - Transform
     # Transform the extracted data using categories (as DataFrame)
     categorized_data = transform.categorize_bank_transactions(
-    bank_data_filepath="/home/pafr/repos/personal_finance_tracker/samples/Umsatzanzeige_DE23500105175435590236_20250104.csv",
+    bank_data_filepath=f"/home/pafr/repos/personal_finance_tracker/res/{transactions_filename}",
     categories_filepath="/home/pafr/repos/personal_finance_tracker/.config/categories.json"
     )
     
