@@ -23,6 +23,7 @@ def main():
 
     # Download the CSV file from the mock API
     API_URL = "http://127.0.0.1:5000/download-transactions"  # Mock API URL
+    # ..to the following path
     transactions_filename = "downloaded_transactions.csv"
     csv_file_path = f"res/{transactions_filename}"  # Where to save the downloaded file
     extract.download_csv_file(save_path=csv_file_path)
