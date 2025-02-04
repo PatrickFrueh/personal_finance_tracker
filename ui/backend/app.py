@@ -28,7 +28,7 @@ def get_spending_categories(**database_credentials):
     connector = connect_to_db(**database_credentials)
     cursor = connector.cursor(dictionary=True)
     
-    # Query to fetch categorized spending data (summary)
+    # Query to fetch categorized spending data (sum of each category)
     cursor.execute("SELECT Kategorie, SUM(Betrag) as total_spent FROM transactions GROUP BY Kategorie")
     summary_result = cursor.fetchall()
     
