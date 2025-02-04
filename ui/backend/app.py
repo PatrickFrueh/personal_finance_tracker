@@ -1,16 +1,18 @@
 from flask import Flask, jsonify
+from flask_cors import CORS
 import mysql.connector
 from dotenv import load_dotenv
 import os
 
+# @@@ .env-file path not correct
 load_dotenv(dotenv_path="../../.config/.env")
 
 app = Flask(__name__)
+CORS(app, origins=["http://localhost:3000"])
 
 # Database connection
 def connect_to_db(**database_credentials):
     connection = mysql.connector.connect(**database_credentials)
-
     return connection
 
 # Database credentials
@@ -41,13 +43,10 @@ def get_spending_categories(**database_credentials):
     connector.close()
     
     # Combine the results into a structured JSON response
-    response = {
+    return jsonify({
         'summary': summary_result,  # Aggregated spending per category
         'transactions': transactions_result  # Individual transaction details
-    }
-
-    # Return the combined data as a JSON response
-    return jsonify(response)
+    })
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
