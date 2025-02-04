@@ -29,6 +29,56 @@ database_credentials = {
 
 @app.route('/api/spending-categories', methods=['GET'])
 def get_spending_categories():
+    """
+    Fetches categorized spending data and individual transaction details from the database.
+
+    This endpoint retrieves two sets of data from the MySQL database:
+    1. A summary of spending per category, showing the total amount spent in each category.
+    2. A list of individual transactions, including details such as the transaction description, 
+       amount, and category.
+
+    This data is intended to be used by a frontend application for visualization purposes. 
+    The frontend will use the aggregated spending data and individual transaction details to present 
+    a comprehensive view of the user's financial data.
+
+    It connects to a MySQL database, executes queries to fetch the necessary data, and 
+    returns the results in a structured JSON format. If any error occurs during the database 
+    connection or query execution, an error message will be returned.
+
+    Returns:
+    JSON: 
+        A JSON object containing two keys:
+        - 'summary': A list of dictionaries with the total amount spent per category.
+        - 'transactions': A list of dictionaries with individual transaction details.
+        
+    Example response:
+    {
+        "summary": [
+            {"Kategorie": "Groceries", "total_spent": 150.75},
+            {"Kategorie": "Entertainment", "total_spent": 50.00}
+        ],
+        "transactions": [
+            {"buchung": "2025-01-01", "auftraggeber_empfaenger": "John Doe", "verwendungszweck": "Grocery store", "betrag": 50.00, "kategorie": "Groceries"},
+            {"buchung": "2025-01-02", "auftraggeber_empfaenger": "Netflix", "verwendungszweck": "Subscription fee", "betrag": 15.00, "kategorie": "Entertainment"}
+        ]
+    }
+
+    Error Response:
+    If the database connection fails or any error occurs, the response will contain an 
+    error message:
+    {
+        "error": "Error while connecting to MySQL: <error-details>"
+    }
+
+    Example:
+    >>> from flask import Flask, jsonify
+    >>> app = Flask(__name__)
+    >>> @app.route('/api/spending-categories', methods=['GET'])
+    >>> def get_spending_categories():
+    >>>     # function implementation
+    >>>     return jsonify({"summary": summary_result, "transactions": transactions_result})
+    """
+
     # Try to establish a connection to the MySQL database
     try:
         connection = mysql.connector.connect(**database_credentials)
