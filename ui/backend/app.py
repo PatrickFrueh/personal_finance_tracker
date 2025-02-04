@@ -4,8 +4,8 @@ import mysql.connector
 from dotenv import load_dotenv
 import os
 
-# @@@ .env-file path not correct
-load_dotenv(dotenv_path="../../.config/.env")
+# Find .env-file using the absolute path
+load_dotenv(dotenv_path="/home/pafr/repos/personal_finance_tracker/.config/.env")
 
 app = Flask(__name__)
 CORS(app, origins=["http://localhost:3000"])
