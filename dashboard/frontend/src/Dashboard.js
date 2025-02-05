@@ -22,7 +22,7 @@ const Dashboard = () => {
                         {
                             label: "Spending by Category",
                             data: amounts,
-                            backgroundColor: ["#ff6384", "#36a2eb", "#ffce56"]
+                            backgroundColor: ["#ff6963", "#36a2eb", "#ffce56"]
                         }
                     ]
                 });
