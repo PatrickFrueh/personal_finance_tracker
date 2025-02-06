@@ -109,7 +109,7 @@ const Dashboard = () => {
             flexDirection: "column", //
             overflow: "hidden"  // Ensure that the chart stays inside the div without overflowing
             }}>
-            <h2 style={{ textAlign: "center" }}>Finance Dashboard</h2>
+            {/* <h2 style={{ textAlign: "center" }}>Finance Dashboard</h2> */}
             <div style={{ flexGrow: 1 }}>
             {chartData.labels ? <Bar data={chartData} options={options}/>: <p>Loading...</p>}
         </div>
