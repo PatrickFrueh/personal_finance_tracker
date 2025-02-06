@@ -42,9 +42,9 @@ const Dashboard = () => {
     }, []);  // Empty dependency array, so it runs only once when the component mounts
 
     return (
-        <div>
-            <h2>Finance Dashboard</h2>
-            {chartData.labels ? <Bar data={chartData} id="myChart" /> : <p>Loading...</p>}
+        <div style={{ width: "1000px", height: "600px", margin: "auto", padding: "20px", border: "1px solid #ddd", borderRadius: "10px", boxShadow: "2px 2px 10px rgba(0,0,0,0.1)", backgroundColor: "#fff" }}>
+            <h2 style={{ textAlign: "center" }}>Finance Dashboard</h2>
+            {chartData.labels ? <Bar data={chartData} /> : <p>Loading...</p>}
         </div>
     );
 };
