@@ -22,7 +22,7 @@ const Dashboard = () => {
                         {
                             label: "Spending by Category",
                             data: amounts,
-                            backgroundColor: ["#ff6963", "#36a2eb", "#ffce56"]
+                            backgroundColor: ["#ffa600","#003f5c","#ff6361", "#58508d","#bc5090"]
                         }
                     ]
                 });
@@ -60,7 +60,7 @@ const Dashboard = () => {
                 ticks: {
                     font: {
                         size: 14,  // Font size of the X-axis labels
-                        family: "Arial, sans-serif",  // Font family
+                        family: "Inter, sans-serif",  // Font family
                         weight: "bold",  // Optional: make labels bold
                     },
                     color: "#fff",  // GitHub-like dark gray color for the X-axis labels
@@ -86,12 +86,12 @@ const Dashboard = () => {
         // Add this to change the chart background color (canvas) itself
         plugins: {
             tooltip: {
-                backgroundColor: '#24292f',  // Tooltip color for clarity
+                backgroundColor: '#31363F',  // Tooltip color for clarity
             },
         },
         // Chart background color area where bars are rendered
         chartArea: {
-            backgroundColor: "#f6f8fa" // Set plot area background color to light gray (GitHub-like)
+            backgroundColor: "#31363F" // Set plot area background color to light gray (GitHub-like)
         },
     };
 
@@ -101,13 +101,14 @@ const Dashboard = () => {
             height: "550px", 
             margin: "auto", 
             padding: "20px", 
-            border: "1px solid #ddd", 
+            border: "1px solid rgb(67, 76, 88)", 
             borderRadius: "10px", 
             boxShadow: "2px 2px 10px rgba(0,0,0,0.1)",
             boxSizing: "border-box", // Ensures border is accounted for in width/height calculation
             display: "flex", 
             flexDirection: "column", //
-            overflow: "hidden"  // Ensure that the chart stays inside the div without overflowing
+            overflow: "hidden",  // Ensure that the chart stays inside the div without overflowing
+            backgroundColor: "#31363F"  // Apply background color to the parent div
             }}>
             {/* <h2 style={{ textAlign: "center" }}>Finance Dashboard</h2> */}
             <div style={{ flexGrow: 1 }}>
