@@ -14,7 +14,10 @@ const Dashboard = () => {
         axios.get("http://localhost:5000/api/spending-categories")
             .then(response => {
                 const categories = response.data.summary.map(item => item.Kategorie);
-                const amounts = response.data.summary.map(item => item.total_spent);
+                const amounts = response.data.summary.map(item => item.total_spent)
+
+                // // Filter out any positive values (incoming funds) and keep only negative values (spending)
+                // amounts = amounts.filter(amount => amount < 0).map(amount => Math.abs(amount)); // Keep only negative values and convert them to positive for chart
 
                 setChartData({
                     labels: categories,
