@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from flask_cors import CORS
 
 import mysql.connector
@@ -79,6 +79,9 @@ def get_spending_categories():
     >>>     return jsonify({"summary": summary_result, "transactions": transactions_result})
     """
 
+    start_date = request.args.get('startDate')  # 'startDate' from query params
+    end_date = request.args.get('endDate')  # 'endDate' from query params
+
     # Try to establish a connection to the MySQL database
     try:
         connection = mysql.connector.connect(**database_credentials)
@@ -88,20 +91,22 @@ def get_spending_categories():
             cursor = connection.cursor(dictionary=True)
 
             # Query to fetch categorized spending data (sum of each category)
-            cursor.execute("""
+            query_sum = """
                         SELECT Kategorie, SUM(ABS(Betrag)) AS total_spent 
                         FROM transactions 
                         WHERE Betrag < 0 
                         GROUP BY Kategorie
-                        """)
+                        """
+            cursor.execute(query_sum, (start_date, end_date))
             summary_result = cursor.fetchall()
 
             # Query to fetch all individual transactions
-            cursor.execute(cursor.execute("""
+            query_transactions = """
                         SELECT buchung, auftraggeber_empfaenger, verwendungszweck, ABS(betrag) as betrag, kategorie 
                         FROM transactions 
                         WHERE betrag < 0
-                        """))
+                        """
+            cursor.execute(query_transactions, (start_date, end_date))
             transactions_result = cursor.fetchall()
 
             # Close DB connection
