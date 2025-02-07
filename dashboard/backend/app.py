@@ -81,6 +81,7 @@ def get_spending_categories():
 
     start_date = request.args.get('startDate')  # 'startDate' from query params
     end_date = request.args.get('endDate')  # 'endDate' from query params
+    print(f"Querying for transactions from {start_date} to {end_date}")
 
     # Try to establish a connection to the MySQL database
     try:
@@ -92,22 +93,25 @@ def get_spending_categories():
 
             # Query to fetch categorized spending data (sum of each category)
             query_sum = """
-                        SELECT Kategorie, SUM(ABS(Betrag)) AS total_spent 
-                        FROM transactions 
-                        WHERE Betrag < 0 
-                        GROUP BY Kategorie
-                        """
-            cursor.execute(query_sum, (start_date, end_date))
+                SELECT Kategorie, SUM(ABS(Betrag)) AS total_spent 
+                FROM transactions 
+                WHERE Betrag < 0 
+                AND buchung BETWEEN %s AND %s
+                GROUP BY Kategorie
+            """
+            cursor.execute(query_sum, (start_date, end_date))  # Pass the start_date and end_date
             summary_result = cursor.fetchall()
 
             # Query to fetch all individual transactions
             query_transactions = """
-                        SELECT buchung, auftraggeber_empfaenger, verwendungszweck, ABS(betrag) as betrag, kategorie 
-                        FROM transactions 
-                        WHERE betrag < 0
-                        """
-            cursor.execute(query_transactions, (start_date, end_date))
+                SELECT buchung, auftraggeber_empfaenger, verwendungszweck, ABS(Betrag) as betrag, kategorie 
+                FROM transactions 
+                WHERE Betrag < 0 
+                AND buchung BETWEEN %s AND %s
+            """
+            cursor.execute(query_transactions, (start_date, end_date))  # Pass the start_date and end_date
             transactions_result = cursor.fetchall()
+
 
             # Close DB connection
             cursor.close()

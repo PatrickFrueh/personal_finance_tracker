@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Bar } from "react-chartjs-2";
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from "chart.js";
 import axios from "axios";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css"; // Import the CSS for the date picker
 import { getPreviousMonthDates } from "./utils/dateUtils";  // Import utility for default date range
+
+// Register components
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 const Dashboard = () => {
     // State for storing chart data and selected date range
