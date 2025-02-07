@@ -88,11 +88,20 @@ def get_spending_categories():
             cursor = connection.cursor(dictionary=True)
 
             # Query to fetch categorized spending data (sum of each category)
-            cursor.execute("SELECT Kategorie, SUM(Betrag) as total_spent FROM transactions GROUP BY kategorie")
+            cursor.execute("""
+                        SELECT Kategorie, SUM(ABS(Betrag)) AS total_spent 
+                        FROM transactions 
+                        WHERE Betrag < 0 
+                        GROUP BY Kategorie
+                        """)
             summary_result = cursor.fetchall()
 
             # Query to fetch all individual transactions
-            cursor.execute("SELECT buchung, auftraggeber_empfaenger, verwendungszweck, betrag, kategorie FROM transactions")
+            cursor.execute(cursor.execute("""
+                        SELECT buchung, auftraggeber_empfaenger, verwendungszweck, ABS(betrag) as betrag, kategorie 
+                        FROM transactions 
+                        WHERE betrag < 0
+                        """))
             transactions_result = cursor.fetchall()
 
             # Close DB connection
