@@ -112,7 +112,6 @@ def get_spending_categories():
             cursor.execute(query_transactions, (start_date, end_date))  # Pass the start_date and end_date
             transactions_result = cursor.fetchall()
 
-
             # Close DB connection
             cursor.close()
             connection.close()

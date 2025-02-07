@@ -24,6 +24,7 @@ const Dashboard = () => {
             }
         })
         .then(response => {
+            console.log('API Response:', response.data);  // Log the response here
             const filteredTransactions = response.data.transactions.filter(transaction => {
                 const transactionDate = new Date(transaction.buchung);
                 return transactionDate >= new Date(startDate) && transactionDate <= new Date(endDate);
@@ -61,7 +62,7 @@ const Dashboard = () => {
     }, [startDate, endDate]); // Re-fetch data when the date range changes
 
     return (
-        <div style={{ width: "1000px", height: "550px", margin: "auto", padding: "20px", border: "1px solid rgb(67, 76, 88)", borderRadius: "10px", boxShadow: "2px 2px 10px rgba(0,0,0,0.1)", boxSizing: "border-box", display: "flex", flexDirection: "column", overflow: "hidden", backgroundColor: "#31363F" }}>
+        <div style={{ width: "1000px", height: "650px", margin: "auto", padding: "20px", border: "1px solid rgb(67, 76, 88)", borderRadius: "10px", boxShadow: "2px 2px 10px rgba(0,0,0,0.1)", boxSizing: "border-box", display: "flex", flexDirection: "column", overflow: "hidden", backgroundColor: "#31363F" }}>
             <h2 style={{ textAlign: "center", color: "#fff" }}>Finance Dashboard</h2>
 
             {/* Date range picker */}
