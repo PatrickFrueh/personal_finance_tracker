@@ -4,8 +4,8 @@ import Dashboard from "./Dashboard";
 function App() {
   return (
     <div className="App">
-      <h1>Finance Dashboard</h1>
-      <Dashboard />
+    <h1 style={{ textAlign: "center", color: "#fff" }}>Finance Dashboard</h1>      
+    <Dashboard />
     </div>
   );
 }
