@@ -92,7 +92,13 @@ const Dashboard = () => {
             </div>
 
             <div style={{ flexGrow: 1 }}>
-                {chartData.labels ? <Bar data={chartData} /> : <p style={{ color: "#fff" }}>Loading...</p>}
+                {chartData.labels ? <Bar data={chartData} options={{
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }}/> : <p style={{ color: "#fff" }}>Loading...</p>}
             </div>
         </div>
     );
