@@ -49,7 +49,7 @@ const Dashboard = () => {
                         let tooltipText = "Top 5 Ausgaben:\n";
                         top5Transactions.forEach(transaction => {
                             const amount = Math.abs(transaction.betrag).toFixed(2);  // Ensure amount is a number
-                            tooltipText += `${transaction.name}: €${amount}\n`;
+                            tooltipText += `${transaction.auftraggeber_empfaenger}: €${amount}\n`;
                         });
 
                         return tooltipText;
