@@ -14,6 +14,7 @@ const Dashboard = () => {
     const [chartData, setChartData] = useState({});
     const [startDate, setStartDate] = useState(new Date(getPreviousMonthDates().startDate));  // Default to previous month's start date
     const [endDate, setEndDate] = useState(new Date(getPreviousMonthDates().endDate));  // Default to previous month's end date
+    const [transactions, setTransactions] = useState([]); // To store individual transactions per category
 
     const options = {
         plugins: {
@@ -22,6 +23,38 @@ const Dashboard = () => {
             },
             title: {
                 display: false
+            },
+            tooltip: {
+                callbacks: {
+                    // Custom tooltip label to show total spending for the category
+                    label: () => {
+                        return "";
+                    },
+                    // Custom tooltip to show top 5 spendings for the hovered bar
+                    afterLabel: (context) => {
+                        const { dataset, dataIndex } = context;
+                        const category = chartData.labels[dataIndex];  // Access labels from chartData
+
+                        // Filter the transactions for the specific category
+                        const filteredTransactions = transactions.filter(
+                            (transaction) => transaction.kategorie === category
+                        );
+
+                        // Sort transactions by amount in descending order and take top 5
+                        const top5Transactions = filteredTransactions
+                            .sort((a, b) => Math.abs(b.betrag) - Math.abs(a.betrag))
+                            .slice(0, 5);
+
+                        // Return the header and top 5 spendings in a formatted string
+                        let tooltipText = "Top 5 Ausgaben:\n";
+                        top5Transactions.forEach(transaction => {
+                            const amount = Math.abs(transaction.betrag).toFixed(2);  // Ensure amount is a number
+                            tooltipText += `${transaction.name}: €${amount}\n`;
+                        });
+
+                        return tooltipText;
+                    }
+                }
             }
         },
         scales: {
@@ -29,9 +62,7 @@ const Dashboard = () => {
                 ticks: {
                     color: "#ffffff", // Ensure it's fully white
                     font: {
-                        family: "'Inter', sans-serif", // Explicitly set the font
-                        // size: 14, // Adjust font size
-                        // weight: "bold" // Optional: Make it bolder for clarity
+                        family: "'Inter', sans-serif"
                     }
                 },
                 grid: {
@@ -42,9 +73,7 @@ const Dashboard = () => {
                 ticks: {
                     color: "#ffffff", // White axis labels
                     font: {
-                        family: "'Inter', sans-serif",
-                        // size: 14,
-                        // weight: "bold"
+                        family: "'Inter', sans-serif"
                     }
                 },
                 grid: {
@@ -53,8 +82,7 @@ const Dashboard = () => {
             }
         }
     };
-    
-    
+
     // Function to fetch and filter data based on the selected date range
     const fetchData = () => {
         axios.get("http://localhost:5000/api/spending-categories", {
@@ -64,23 +92,34 @@ const Dashboard = () => {
             }
         })
         .then(response => {
-            console.log('API Response:', response.data);  // Log the response here
             const filteredTransactions = response.data.transactions.filter(transaction => {
                 const transactionDate = new Date(transaction.buchung);
                 return transactionDate >= new Date(startDate) && transactionDate <= new Date(endDate);
             });
 
             const categoryAggregates = {};
+            // Store individual transactions for each category
+            const categoryTransactions = {};
+
             filteredTransactions.forEach(transaction => {
                 if (categoryAggregates[transaction.kategorie]) {
                     categoryAggregates[transaction.kategorie] += Math.abs(transaction.betrag); // Convert to positive for spending
                 } else {
                     categoryAggregates[transaction.kategorie] = Math.abs(transaction.betrag);
                 }
+
+                // Add individual transaction to the respective category
+                if (!categoryTransactions[transaction.kategorie]) {
+                    categoryTransactions[transaction.kategorie] = [];
+                }
+                categoryTransactions[transaction.kategorie].push(transaction);
             });
 
             const categories = Object.keys(categoryAggregates);
             const amounts = Object.values(categoryAggregates);
+
+            // Set transactions for later use in tooltip
+            setTransactions(filteredTransactions);
 
             setChartData({
                 labels: categories,
