@@ -63,8 +63,6 @@ const Dashboard = () => {
 
     return (
         <div style={{ width: "1000px", height: "570px", margin: "auto", padding: "20px", border: "1px solid rgb(67, 76, 88)", borderRadius: "10px", boxShadow: "2px 2px 10px rgba(0,0,0,0.1)", boxSizing: "border-box", display: "flex", flexDirection: "column", overflow: "hidden", backgroundColor: "#31363F" }}>
-            {/* <h2 style={{ textAlign: "center", color: "#fff" }}>Finance Dashboard</h2> */}
-
             {/* Date range picker */}
             <div style={{ display: "flex", justifyContent: "center", marginBottom: "20px" }}>
                 <DatePicker
@@ -98,7 +96,7 @@ const Dashboard = () => {
                             display: false
                         },
                         title: {
-                            display: false // 👈 Disables any auto-generated chart title
+                            display: false // Disables any auto-generated chart title
                         }
                     }
                 }}/> : <p style={{ color: "#fff" }}>Loading...</p>}
