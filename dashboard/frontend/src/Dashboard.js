@@ -45,12 +45,34 @@ const Dashboard = () => {
                             .sort((a, b) => Math.abs(b.betrag) - Math.abs(a.betrag))
                             .slice(0, 5);
 
+                        // Set fixed line length for each tooltip item
+                        const lineLength = 50;  // Total number of characters for each line (including bullet point)
+                        const nameLength = 30;  // Width for the name (before the amount)
+                        const amountLength = 10;  // Width for the amount (including €)
+                        const bulletPointLength = 2; // Bullet point + space
+
                         // Return the header and top 5 spendings in a formatted string
                         let tooltipText = "Top 5 Ausgaben:\n";
                         top5Transactions.forEach(transaction => {
-                            const amount = Math.abs(transaction.betrag).toFixed(2);  // Ensure amount is a number
-                            tooltipText += `${transaction.auftraggeber_empfaenger}: €${amount}\n`;
+                            const amount = Math.abs(transaction.betrag).toFixed(2);  // Format amount to 2 decimal places
+                            const truncatedName = transaction.auftraggeber_empfaenger.length > 15
+                                ? transaction.auftraggeber_empfaenger.slice(0, 15) + "[...]"
+                                : transaction.auftraggeber_empfaenger;
+
+                            const truncatedNameLength = truncatedName.length;  // Calculate the length of the truncated name
+                            const availableSpaceForAmount = lineLength - bulletPointLength - truncatedNameLength; // Calculate remaining space for amount
+
+                            // Ensure the name is left-aligned and doesn't exceed its space
+                            const formattedName = truncatedName.padEnd(truncatedNameLength, '');  // Keep the name length as is
+
+                            // Right-align the amount by padding the start
+                            const formattedAmount = `€${amount}`.padStart(availableSpaceForAmount, ' ');  // Pad amount to fill remaining space
+
+                            // Add the bullet point, formatted name, and formatted amount
+                            tooltipText += `• ${formattedName}${formattedAmount}\n`;
                         });
+
+
 
                         return tooltipText;
                     }
