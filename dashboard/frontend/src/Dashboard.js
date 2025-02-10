@@ -15,6 +15,46 @@ const Dashboard = () => {
     const [startDate, setStartDate] = useState(new Date(getPreviousMonthDates().startDate));  // Default to previous month's start date
     const [endDate, setEndDate] = useState(new Date(getPreviousMonthDates().endDate));  // Default to previous month's end date
 
+    const options = {
+        plugins: {
+            legend: {
+                display: false
+            },
+            title: {
+                display: false
+            }
+        },
+        scales: {
+            x: {
+                ticks: {
+                    color: "#ffffff", // Ensure it's fully white
+                    font: {
+                        family: "'Inter', sans-serif", // Explicitly set the font
+                        // size: 14, // Adjust font size
+                        // weight: "bold" // Optional: Make it bolder for clarity
+                    }
+                },
+                grid: {
+                    color: "rgba(255, 255, 255, 0.2)" // Light white grid for better visibility
+                }
+            },
+            y: {
+                ticks: {
+                    color: "#ffffff", // White axis labels
+                    font: {
+                        family: "'Inter', sans-serif",
+                        // size: 14,
+                        // weight: "bold"
+                    }
+                },
+                grid: {
+                    color: "rgba(255, 255, 255, 0.2)" // Match x-axis grid color
+                }
+            }
+        }
+    };
+    
+    
     // Function to fetch and filter data based on the selected date range
     const fetchData = () => {
         axios.get("http://localhost:5000/api/spending-categories", {
@@ -90,16 +130,7 @@ const Dashboard = () => {
             </div>
 
             <div style={{ flexGrow: 1 }}>
-                {chartData.labels ? <Bar data={chartData} options={{
-                    plugins: {
-                        legend: {
-                            display: false
-                        },
-                        title: {
-                            display: false // Disables any auto-generated chart title
-                        }
-                    }
-                }}/> : <p style={{ color: "#fff" }}>Loading...</p>}
+                {chartData.labels ? <Bar data={chartData} options={options}/> : <p style={{ color: "#fff" }}>Loading...</p>}
             </div>
         </div>
     );
