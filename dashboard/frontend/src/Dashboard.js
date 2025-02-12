@@ -148,7 +148,7 @@ const Dashboard = () => {
         .catch(error => console.error(error));
     };
 
-    // Fetch data when the component mounts or when the date range changes
+    // Fetch data when the component or when the date range changes
     useEffect(() => {
         fetchData();
     }, [startDate, endDate]); // Re-fetch data when the date range changes
