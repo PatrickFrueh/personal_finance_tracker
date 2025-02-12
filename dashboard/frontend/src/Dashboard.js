@@ -6,8 +6,8 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css"; // Import the CSS for the date picker
 import { getPreviousMonthDates } from "./utils/dateUtils";  // Import utility for default date range
 
+import './index.css';
 import "./tooltip.css";
-import ReactDOM from "react-dom";
 import { createRoot } from "react-dom/client";  // Import createRoot
 
 // Register components
@@ -52,7 +52,7 @@ const Dashboard = () => {
                     // Get the category from the chart
                     const { dataIndex } = tooltipModel.dataPoints[0];
                     const category = chartData.labels[dataIndex];
-                        
+
                     // Get the top 5 transactions
                     const filteredTransactions = transactions.filter(
                         (transaction) => transaction.kategorie === category
@@ -62,11 +62,12 @@ const Dashboard = () => {
                         .slice(0, 5);
     
                     // Convert transactions to JSX
+                    // Ensure each div as a unique key using .map() loop over array
                     const tooltipContent = (
                         <div className="custom-tooltip">
                             <div className="tooltip-header">Top 5 Ausgaben:</div>
                             {top5Transactions.map((transaction, index) => (
-                                <div key={index} className="tooltip-row">
+                                <div key={index} className="tooltip-row"> 
                                     <span className="tooltip-name">
                                         {transaction.auftraggeber_empfaenger.length > 15
                                             ? transaction.auftraggeber_empfaenger.slice(0, 15) + " [...]"
@@ -90,7 +91,7 @@ const Dashboard = () => {
                     tooltipEl.style.position = "absolute";
                     tooltipEl.style.left = position.left + window.pageXOffset + tooltipModel.caretX + "px";
                     tooltipEl.style.top = position.top + window.pageYOffset + tooltipModel.caretY + "px";
-                    tooltipEl.style.pointerEvents = "none";
+                    tooltipEl.style.pointerEvents = "none"; // Prevent blocking clicks or hover events on other elements underneath it.
                 }
             }
         }
