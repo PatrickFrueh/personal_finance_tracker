@@ -6,6 +6,10 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css"; // Import the CSS for the date picker
 import { getPreviousMonthDates } from "./utils/dateUtils";  // Import utility for default date range
 
+import "./tooltip.css";
+import ReactDOM from "react-dom";
+import { createRoot } from "react-dom/client";  // Import createRoot
+
 // Register components
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
@@ -25,85 +29,72 @@ const Dashboard = () => {
                 display: false
             },
             tooltip: {
-                callbacks: {
-                    // Custom tooltip label to show total spending for the category
-                    label: () => {
-                        return "";
-                    },
-                    // Custom tooltip to show top 5 spendings for the hovered bar
-                    afterLabel: (context) => {
-                        const { dataset, dataIndex } = context;
-                        const category = chartData.labels[dataIndex];  // Access labels from chartData
-
-                        // Filter the transactions for the specific category
-                        const filteredTransactions = transactions.filter(
-                            (transaction) => transaction.kategorie === category
-                        );
-
-                        // Sort transactions by amount in descending order and take top 5
-                        const top5Transactions = filteredTransactions
-                            .sort((a, b) => Math.abs(b.betrag) - Math.abs(a.betrag))
-                            .slice(0, 5);
-
-                        // Set fixed line length for each tooltip item
-                        const lineLength = 50;  // Total number of characters for each line (including bullet point)
-                        const nameLength = 30;  // Width for the name (before the amount)
-                        const amountLength = 10;  // Width for the amount (including €)
-                        const bulletPointLength = 2; // Bullet point + space
-
-                        // Return the header and top 5 spendings in a formatted string
-                        let tooltipText = "Top 5 Ausgaben:\n";
-                        top5Transactions.forEach(transaction => {
-                            const amount = Math.abs(transaction.betrag).toFixed(2);  // Format amount to 2 decimal places
-                            const truncatedName = transaction.auftraggeber_empfaenger.length > 15
-                                ? transaction.auftraggeber_empfaenger.slice(0, 15) + "[...]"
-                                : transaction.auftraggeber_empfaenger;
-
-                            const truncatedNameLength = truncatedName.length;  // Calculate the length of the truncated name
-                            const availableSpaceForAmount = lineLength - bulletPointLength - truncatedNameLength; // Calculate remaining space for amount
-
-                            // Ensure the name is left-aligned and doesn't exceed its space
-                            const formattedName = truncatedName.padEnd(truncatedNameLength, '');  // Keep the name length as is
-
-                            // Right-align the amount by padding the start
-                            const formattedAmount = `€${amount}`.padStart(availableSpaceForAmount, ' ');  // Pad amount to fill remaining space
-
-                            // Add the bullet point, formatted name, and formatted amount
-                            tooltipText += `• ${formattedName}${formattedAmount}\n`;
-                        });
-
-
-
-                        return tooltipText;
+                enabled: false,  // Disable default tooltip
+                external: function(context) {
+                    let tooltipEl = document.getElementById('chartjs-tooltip');
+    
+                    // Create tooltip element if it doesn't exist
+                    if (!tooltipEl) {
+                        tooltipEl = document.createElement('div');
+                        tooltipEl.id = 'chartjs-tooltip';
+                        tooltipEl.innerHTML = '<div></div>';
+                        document.body.appendChild(tooltipEl);
                     }
-                }
-            }
-        },
-        scales: {
-            x: {
-                ticks: {
-                    color: "#ffffff", // Ensure it's fully white
-                    font: {
-                        family: "'Inter', sans-serif"
+    
+                    const tooltipModel = context.tooltip;
+    
+                    if (!tooltipModel || tooltipModel.opacity === 0) {
+                        tooltipEl.style.opacity = 0;
+                        return;
                     }
-                },
-                grid: {
-                    color: "rgba(255, 255, 255, 0.2)" // Light white grid for better visibility
-                }
-            },
-            y: {
-                ticks: {
-                    color: "#ffffff", // White axis labels
-                    font: {
-                        family: "'Inter', sans-serif"
-                    }
-                },
-                grid: {
-                    color: "rgba(255, 255, 255, 0.2)" // Match x-axis grid color
+    
+                    // Get the category from the chart
+                    const { dataIndex } = tooltipModel.dataPoints[0];
+                    const category = chartData.labels[dataIndex];
+    
+                    // Get the top 5 transactions
+                    const filteredTransactions = transactions.filter(
+                        (transaction) => transaction.kategorie === category
+                    );
+                    const top5Transactions = filteredTransactions
+                        .sort((a, b) => Math.abs(b.betrag) - Math.abs(a.betrag))
+                        .slice(0, 5);
+    
+                    // Convert transactions to JSX
+                    const tooltipContent = (
+                        <div className="custom-tooltip">
+                            <div className="tooltip-header">Top 5 Ausgaben:</div>
+                            {top5Transactions.map((transaction, index) => (
+                                <div key={index} className="tooltip-row">
+                                    <span className="tooltip-name">
+                                        {transaction.auftraggeber_empfaenger.length > 15
+                                            ? transaction.auftraggeber_empfaenger.slice(0, 15) + " [...]"
+                                            : transaction.auftraggeber_empfaenger}
+                                    </span>
+                                    <span className="tooltip-amount">
+                                        {Math.abs(transaction.betrag).toFixed(2)}€
+                                    </span>
+                                </div>
+                            ))}
+                        </div>
+                    );
+    
+                    // Inside tooltip external function:
+                    const root = createRoot(tooltipEl);
+                    root.render(tooltipContent);
+    
+                    // Positioning the tooltip
+                    const position = context.chart.canvas.getBoundingClientRect();
+                    tooltipEl.style.opacity = 1;
+                    tooltipEl.style.position = "absolute";
+                    tooltipEl.style.left = position.left + window.pageXOffset + tooltipModel.caretX + "px";
+                    tooltipEl.style.top = position.top + window.pageYOffset + tooltipModel.caretY + "px";
+                    tooltipEl.style.pointerEvents = "none";
                 }
             }
         }
     };
+    
 
     // Function to fetch and filter data based on the selected date range
     const fetchData = () => {

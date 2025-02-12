@@ -1,0 +1,43 @@
+/* Tooltip Styles */
+#chartjs-tooltip {
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 14px;
+    max-width: 250px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+    position: absolute;
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+    pointer-events: none;
+}
+
+.custom-tooltip {
+    display: flex;
+    flex-direction: column;
+}
+
+.tooltip-header {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.tooltip-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.tooltip-name {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.tooltip-amount {
+    flex-shrink: 0;
+    min-width: 60px;
+    text-align: right;
+}
