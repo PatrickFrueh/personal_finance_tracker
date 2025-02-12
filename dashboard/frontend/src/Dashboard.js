@@ -37,12 +37,13 @@ const Dashboard = () => {
                     if (!tooltipEl) {
                         tooltipEl = document.createElement('div');
                         tooltipEl.id = 'chartjs-tooltip';
-                        tooltipEl.innerHTML = '<div></div>';
+                        tooltipEl.innerHTML = '<div></div>'; // Set placeholder div
                         document.body.appendChild(tooltipEl);
                     }
     
                     const tooltipModel = context.tooltip;
-    
+
+                    // Hide tooltip using chart.js settings (in case there's no hovering taking place) 
                     if (!tooltipModel || tooltipModel.opacity === 0) {
                         tooltipEl.style.opacity = 0;
                         return;
@@ -51,7 +52,7 @@ const Dashboard = () => {
                     // Get the category from the chart
                     const { dataIndex } = tooltipModel.dataPoints[0];
                     const category = chartData.labels[dataIndex];
-    
+                        
                     // Get the top 5 transactions
                     const filteredTransactions = transactions.filter(
                         (transaction) => transaction.kategorie === category
