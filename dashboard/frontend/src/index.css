@@ -1,6 +1,6 @@
 body {
   background-color: #222831;  /* GitHub blue */
-  color: #fff;                /* Text color to make it readable */
+  color: #ffffff;                /* Text color to make it readable */
   margin: 0;
   padding: 0;
 }
@@ -19,6 +19,7 @@ body {
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: "'Inter', sans-serif", source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+    color: #ffffff,
 }
