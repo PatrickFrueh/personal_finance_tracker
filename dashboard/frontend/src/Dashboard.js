@@ -20,9 +20,6 @@ const Dashboard = () => {
     const [endDate, setEndDate] = useState(new Date(getPreviousMonthDates().endDate));  // Default to previous month's end date
     const [transactions, setTransactions] = useState([]); // To store individual transactions per category
 
-    ChartJS.defaults.font.family = "'Inter', sans-serif";
-    ChartJS.defaults.color = "#ffffff"; // Default color for text in the chart
-
     const options = {
         plugins: {
             legend: {
@@ -30,30 +27,6 @@ const Dashboard = () => {
             },
             title: {
                 display: false
-            },
-            scales: {
-                x: {
-                    ticks: {
-                        color: "#ffffff", // Ensure it's fully white
-                        font: {
-                            family: "'Inter', sans-serif"
-                        }
-                    },
-                    grid: {
-                        color: "rgba(255, 255, 255, 0.2)" // Light white grid for better visibility
-                    }
-                },
-                y: {
-                    ticks: {
-                        color: "#ffffff", // White axis labels
-                        font: {
-                            family: "'Inter', sans-serif"
-                        }
-                    },
-                    grid: {
-                        color: "rgba(255, 255, 255, 0.2)" // Match x-axis grid color
-                    }
-                }
             },
             tooltip: {
                 enabled: false,  // Disable default tooltip
@@ -121,9 +94,44 @@ const Dashboard = () => {
                     tooltipEl.style.pointerEvents = "none"; // Prevent blocking clicks or hover events on other elements underneath it.
                 }
             },
-        }
+        },
+        scales: {
+            x: {
+                ticks: {
+                    color: "#ffffff", // Ensure it's fully white
+                    font: {
+                        family: "'Inter', sans-serif"
+                    }
+                },
+                grid: {
+                    color: "rgba(255, 255, 255, 0.2)" // Light white grid for better visibility
+                }
+            },
+            y: {
+                ticks: {
+                    color: "#ffffff", // White axis labels
+                    font: {
+                        family: "'Inter', sans-serif",
+                    },
+                },
+                grid: {
+                    color: "rgba(255, 255, 255, 0.2)" // Match x-axis grid color
+                },
+                title: { // **Added title to y-axis**
+                    display: true,  // **Ensures the title is visible**
+                    text: "Ausgaben in €",  // **Label text to display on y-axis**
+                    color: "#ffffff",  // **Sets the title color to white**
+                    font: {
+                        family: "'Inter', sans-serif",
+                        size: 14, // **Adjusts the font size of the label**
+                        weight: 'bold', // Optional: makes the label bold
+                    }
+                }
+            }
+        },
     };
-    
+
+    console.log("This is where I log the options:", options);
 
     // Function to fetch and filter data based on the selected date range
     const fetchData = () => {
