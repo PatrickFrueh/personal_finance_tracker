@@ -10,6 +10,8 @@ import './index.css';
 import "./tooltip.css";
 import { createRoot } from "react-dom/client";  // Import createRoot
 
+import { useNavigate } from 'react-router-dom';  // Import navigate from react-router
+
 // Register components
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
@@ -19,7 +21,13 @@ const Dashboard = () => {
     const [startDate, setStartDate] = useState(new Date(getPreviousMonthDates().startDate));  // Default to previous month's start date
     const [endDate, setEndDate] = useState(new Date(getPreviousMonthDates().endDate));  // Default to previous month's end date
     const [transactions, setTransactions] = useState([]); // To store individual transactions per category
-
+    const navigate = useNavigate();  // Initialize the navigate function
+    
+    const navigateToDetailsPage = (category) => {
+        // Navigate to the details page with the selected category and the current date range
+        navigate(`/details/${category}?startDate=${startDate.toISOString()}&endDate=${endDate.toISOString()}`);
+    };
+    
     const options = {
         plugins: {
             legend: {
@@ -129,6 +137,17 @@ const Dashboard = () => {
                 }
             }
         },
+        onClick: (event, elements) => {
+            if (elements.length > 0) {
+                // Get the clicked element (the bar)
+                const element = elements[0];
+                const categoryIndex = element.index;
+                const category = chartData.labels[categoryIndex];  // Get the category from the clicked bar
+    
+                // Now navigate to a new page with the selected category and date range
+                navigateToDetailsPage(category);
+            }
+        }
     };
 
     // Function to fetch and filter data based on the selected date range
@@ -144,45 +163,59 @@ const Dashboard = () => {
                 const transactionDate = new Date(transaction.buchung);
                 return transactionDate >= new Date(startDate) && transactionDate <= new Date(endDate);
             });
-
+    
             const categoryAggregates = {};
             // Store individual transactions for each category
             const categoryTransactions = {};
-
+    
             filteredTransactions.forEach(transaction => {
                 if (categoryAggregates[transaction.kategorie]) {
                     categoryAggregates[transaction.kategorie] += Math.abs(transaction.betrag); // Convert to positive for spending
                 } else {
                     categoryAggregates[transaction.kategorie] = Math.abs(transaction.betrag);
                 }
-
+    
                 // Add individual transaction to the respective category
                 if (!categoryTransactions[transaction.kategorie]) {
                     categoryTransactions[transaction.kategorie] = [];
                 }
                 categoryTransactions[transaction.kategorie].push(transaction);
             });
-
+    
+            // Convert to arrays of categories and amounts
             const categories = Object.keys(categoryAggregates);
             const amounts = Object.values(categoryAggregates);
-
+    
+            // Sort the categories by amounts in descending order
+            const sortedData = categories
+                .map((category, index) => ({
+                    category,
+                    amount: amounts[index]
+                }))
+                .sort((a, b) => b.amount - a.amount); // Sort by amount descending
+    
+            // Reorder categories and amounts based on sortedData
+            const sortedCategories = sortedData.map(item => item.category);
+            const sortedAmounts = sortedData.map(item => item.amount);
+    
             // Set transactions for later use in tooltip
             setTransactions(filteredTransactions);
-
+    
+            // Update chart data
             setChartData({
-                labels: categories,
+                labels: sortedCategories,
                 datasets: [
                     {
                         label: "Spending by Category",
-                        data: amounts,
+                        data: sortedAmounts,
                         backgroundColor: ["#ffa600","#003f5c","#ff6361", "#58508d","#bc5090"]
                     }
                 ]
             });
         })
         .catch(error => console.error(error));
-    }, [startDate, endDate]);  // <--- Dependencies (only re-create if startDate/endDate change);
-
+    }, [startDate, endDate]);
+    
     // Fetch data when the component or when the date range changes
     useEffect(() => {
         fetchData();
