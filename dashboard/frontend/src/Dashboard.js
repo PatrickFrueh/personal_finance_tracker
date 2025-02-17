@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Bar } from "react-chartjs-2";
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from "chart.js";
 import axios from "axios";
@@ -70,7 +70,7 @@ const Dashboard = () => {
                                 <div key={index} className="tooltip-row"> 
                                     <span className="tooltip-name">
                                         {transaction.auftraggeber_empfaenger.length > 15
-                                            ? transaction.auftraggeber_empfaenger.slice(0, 15) + " [...]"
+                                            ? transaction.auftraggeber_empfaenger.slice(0, 15) + " [...] "
                                             : transaction.auftraggeber_empfaenger}
                                     </span>
                                     <span className="tooltip-amount">
@@ -131,10 +131,8 @@ const Dashboard = () => {
         },
     };
 
-    console.log("This is where I log the options:", options);
-
     // Function to fetch and filter data based on the selected date range
-    const fetchData = () => {
+    const fetchData = useCallback(() => {
         axios.get("http://localhost:5000/api/spending-categories", {
             params: {
                 startDate: startDate.toISOString().split('T')[0],  // Format date as YYYY-MM-DD
@@ -183,12 +181,12 @@ const Dashboard = () => {
             });
         })
         .catch(error => console.error(error));
-    };
+    }, [startDate, endDate]);  // <--- Dependencies (only re-create if startDate/endDate change);
 
     // Fetch data when the component or when the date range changes
     useEffect(() => {
         fetchData();
-    }, [startDate, endDate]); // Re-fetch data when the date range changes
+    }, [fetchData]); // Re-fetch data when the date range changes
 
     return (
         <div style={{ width: "1000px", height: "570px", margin: "auto", padding: "20px", border: "1px solid rgb(67, 76, 88)", borderRadius: "10px", boxShadow: "2px 2px 10px rgba(0,0,0,0.1)", boxSizing: "border-box", display: "flex", flexDirection: "column", overflow: "hidden", backgroundColor: "#31363F" }}>
