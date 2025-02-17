@@ -27,7 +27,7 @@ const Dashboard = () => {
         // Navigate to the details page with the selected category and the current date range
         navigate(`/details/${category}?startDate=${startDate.toISOString()}&endDate=${endDate.toISOString()}`);
     };
-    
+
     const options = {
         plugins: {
             legend: {
@@ -220,6 +220,21 @@ const Dashboard = () => {
     useEffect(() => {
         fetchData();
     }, [fetchData]); // Re-fetch data when the date range changes
+
+    // Function to remove the tooltip
+    const removeTooltip = () => {
+        const tooltipEl = document.getElementById('chartjs-tooltip');
+        if (tooltipEl) {
+            tooltipEl.style.opacity = 0;
+        }
+    };
+
+    // Cleanup tooltip on component unmount (or when navigating away)
+    useEffect(() => {
+        return () => {
+            removeTooltip();
+        };
+    }, []);
 
     return (
         <div style={{ width: "1000px", height: "570px", margin: "auto", padding: "20px", border: "1px solid rgb(67, 76, 88)", borderRadius: "10px", boxShadow: "2px 2px 10px rgba(0,0,0,0.1)", boxSizing: "border-box", display: "flex", flexDirection: "column", overflow: "hidden", backgroundColor: "#31363F" }}>
