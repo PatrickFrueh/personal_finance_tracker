@@ -90,11 +90,3 @@
     background-color: #2fbb4f; /* Hover color for out-of-range days */
     color: #ffffff; /* White text */
 }
-
-/* ====== Triangle Arrow Styling ====== */
-.react-datepicker__triangle {
-    border-top-color: #fc2121 !important; /* Red triangle color */
-    border-left-color: transparent !important;
-    border-right-color: transparent !important;
-    border-bottom-color: transparent !important;
-}

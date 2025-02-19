@@ -207,18 +207,18 @@ const Dashboard = () => {
                     selectsStart
                     startDate={startDate}
                     endDate={endDate}
-                    dateFormat="yyyy-MM-dd"
+                    dateFormat="dd-MM-yyyy"
                     placeholderText="Start Date"
                     className="date-picker" // Make sure your 'date-picker' class has the correct styles in CSS
                 />
-                    <span style={{ margin: "0 10px", color: "#fff", alignSelf: "center", fontSize: "18px"}}>to</span>                <DatePicker
+                    <span style={{ margin: "0 15px", color: "#fff", alignSelf: "center", fontSize: "18px"}}>bis</span>                <DatePicker
                     selected={endDate}
                     onChange={date => setEndDate(date)}
                     selectsEnd
                     startDate={startDate}
                     endDate={endDate}
                     minDate={startDate}
-                    dateFormat="yyyy-MM-dd"
+                    dateFormat="dd-MM-yyyy"
                     placeholderText="End Date"
                     className="date-picker"
                 />
