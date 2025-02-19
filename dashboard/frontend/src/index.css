@@ -23,3 +23,15 @@ code {
     monospace;
     color: #ffffff,
 }
+
+/* DatePicker.css */
+.date-picker {
+  background-color: #2c2f3d; /* Dark background to fit theme */
+  color: #ffffff; /* White text */
+  border: 1px solid #444; /* Lighter border for contrast */
+  border-radius: 5px;
+  padding: 10px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  outline: none;
+}

@@ -5,10 +5,12 @@ import axios from "axios";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { getPreviousMonthDates } from "./utils/dateUtils";
-import './index.css';
-import "./tooltip.css";
 import { createRoot } from "react-dom/client";
 import { useNavigate, useLocation } from 'react-router-dom';
+
+import "./index.css";
+import "./tooltip.css";
+import "./DatePicker.css"
 
 // Register components
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
@@ -199,7 +201,7 @@ const Dashboard = () => {
     return (
         <div style={{ width: "1000px", height: "570px", margin: "auto", padding: "20px", border: "1px solid rgb(67, 76, 88)", borderRadius: "10px", boxShadow: "2px 2px 10px rgba(0,0,0,0.1)", boxSizing: "border-box", display: "flex", flexDirection: "column", overflow: "hidden", backgroundColor: "#31363F" }}>
             <div style={{ display: "flex", justifyContent: "center", marginBottom: "20px" }}>
-                <DatePicker
+            <DatePicker
                     selected={startDate}
                     onChange={date => setStartDate(date)}
                     selectsStart
@@ -207,10 +209,19 @@ const Dashboard = () => {
                     endDate={endDate}
                     dateFormat="yyyy-MM-dd"
                     placeholderText="Start Date"
-                    className="date-picker"
+                    className="date-picker" // Make sure your 'date-picker' class has the correct styles in CSS
+                    style={{
+                        textAlign: "center",  // Center text inside the date block
+                        backgroundColor: "#2c2f3d",  // Dark background for consistency
+                        color: "#fff",  // White text
+                        border: "1px solid #444",  // Subtle border to match your dark theme
+                        borderRadius: "5px",  // Rounded corners
+                        padding: "10px",  // Padding for spacing
+                        fontFamily: "'Inter', sans-serif",  // Match the font family used across the app
+                        fontSize: "14px"  // Standard font size
+                    }}
                 />
-                <span style={{ margin: "0 10px", color: "#fff" }}>to</span>
-                <DatePicker
+                    <span style={{ margin: "0 10px", color: "#fff", alignSelf: "center", fontSize: "18px", fontWeight: "bold" }}>to</span>                <DatePicker
                     selected={endDate}
                     onChange={date => setEndDate(date)}
                     selectsEnd
