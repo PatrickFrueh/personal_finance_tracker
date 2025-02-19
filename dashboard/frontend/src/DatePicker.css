@@ -1,13 +1,13 @@
 /* ====== General Styles ====== */
 .react-datepicker {
     background-color: #1e1e2f; /* Dark background */
-    border: 2px solid white;
+    border: solid #48525c; /* Border for the calendar */
 }
 
 /* ====== Header (Month & Year Selector) ====== */
 .react-datepicker__header {
-    background-color: #2b3137;
-    color: gray;
+    background-color: #2b3137; /* Dark background for header */
+    color: gray; /* Gray text for month & year */
 }
 
 /* Current month text */
@@ -18,51 +18,83 @@
 
 /* Day-of-week headers (Mo, Tu, We, etc.) */
 .react-datepicker__day-names {
-    background-color: #2c2f3d;
+    background-color: #2b3137; /* Dark background */
 }
 
-/* Individual weekday labels */
+/* Individual weekday labels (Mo, Tu, We, etc.) */
 .react-datepicker__day-name {
-    color: rgb(184, 184, 184);
+    color: rgb(184, 184, 184); /* Light gray */
     font-weight: bold;
     font-size: 14px;
 }
 
 /* ====== Days (1-31) Styling ====== */
 .react-datepicker__day {
-    color: #ffffff;
+    color: #ffffff; /* White text for days */
     font-weight: bold;
-    transition: background-color 0.3s ease-in-out; /* Smooth transition for hover */
+    transition: background-color 0.1s ease-in-out; /* Smooth transition for hover */
 }
 
-/* Selected day (make sure this has !important) */
+/* More specific selector for the selected day */
 .react-datepicker__day--selected {
-    background-color: #5b6d7e !important; /* Use your selected color */
-    color: #ffffff !important;
+    background-color: white !important; /* Background for selected day */
+    color: #15181b !important; /* Dark text for selected day */
     font-weight: bold;
-    border-radius: 4px;
+    border-radius: 4px; /* Rounded corners for selected day */
 }
 
-/* Today's date */
+/* ====== Days in Range Styling (for interval) ====== */
+.react-datepicker__day--in-range {
+    background-color: #22323f !important; /* Color for days in range */
+    color: white !important; /* White text */
+}
+
+/* Hover effect for interval days */
+.react-datepicker__day--in-range:hover {
+    background-color: #2fbb4f !important; /* Color on hover */
+    color: white !important;
+}
+
+/* ====== Today's Date Styling ====== */
 .react-datepicker__day--today {
-    border: 2px solid #ffa600 !important;
-    color: #ffffff !important;
+    border: 2px solid #2fbb4f !important; /* Green border for today's date */
+    color: #ffffff !important; /* White text */
+    transition: background-color 0.5s ease-in-out, color 0.5s ease-in-out;
 }
 
-/* ====== Hover Effect - Fixing the Hover Color ====== */
+/* ====== Hover Effect Styling for Normal Days ====== */
 .react-datepicker__day:hover {
-    background-color: #444c56 !important; /* Darker gray for hover effect */
-    color: #ffffff !important;
-    cursor: pointer;
+    background-color: #2fbb4f !important; /* Hover color for days */
+    color: white !important;
+    cursor: pointer; /* Pointer cursor on hover */
 }
 
 /* ====== Date Input Styling ====== */
 .react-datepicker__input-container input {
     text-align: center;
-    color: #fff;
+    color: #fff; /* White text */
     font-family: 'Inter', sans-serif;
-    background-color: #31363F;
-    border: 1px solid #444c56;
+    background-color: #31363F; /* Dark background */
+    border: 1px solid #444c56; /* Subtle border */
     padding: 10px;
     border-radius: 5px;
+}
+
+/* ====== Out-of-Range Days Styling (Days outside the current month) ====== */
+.react-datepicker__day--outside-month {
+    color: #bbbbbb; /* Light gray text for out-of-range days */
+}
+
+/* Hover effect for out-of-range days */
+.react-datepicker__day--outside-month:hover {
+    background-color: #2fbb4f; /* Hover color for out-of-range days */
+    color: #ffffff; /* White text */
+}
+
+/* ====== Triangle Arrow Styling ====== */
+.react-datepicker__triangle {
+    border-top-color: #fc2121 !important; /* Red triangle color */
+    border-left-color: transparent !important;
+    border-right-color: transparent !important;
+    border-bottom-color: transparent !important;
 }

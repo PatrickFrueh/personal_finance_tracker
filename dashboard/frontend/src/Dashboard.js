@@ -210,16 +210,6 @@ const Dashboard = () => {
                     dateFormat="yyyy-MM-dd"
                     placeholderText="Start Date"
                     className="date-picker" // Make sure your 'date-picker' class has the correct styles in CSS
-                    style={{
-                        textAlign: "center",  // Center text inside the date block
-                        backgroundColor: "#2c2f3d",  // Dark background for consistency
-                        color: "#fff",  // White text
-                        border: "1px solid #444",  // Subtle border to match your dark theme
-                        borderRadius: "5px",  // Rounded corners
-                        padding: "10px",  // Padding for spacing
-                        fontFamily: "'Inter', sans-serif",  // Match the font family used across the app
-                        fontSize: "14px"  // Standard font size
-                    }}
                 />
                     <span style={{ margin: "0 10px", color: "#fff", alignSelf: "center", fontSize: "18px"}}>to</span>                <DatePicker
                     selected={endDate}
