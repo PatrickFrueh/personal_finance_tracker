@@ -32,41 +32,37 @@
 .react-datepicker__day {
     color: #ffffff;
     font-weight: bold;
+    transition: background-color 0.3s ease-in-out; /* Smooth transition for hover */
 }
 
-/* Selected day */
-/* .react-datepicker__day--selected {
-    background-color: #3a4a58;
-    color: white;
-} */
+/* Selected day (make sure this has !important) */
+.react-datepicker__day--selected {
+    background-color: #5b6d7e !important; /* Use your selected color */
+    color: #ffffff !important;
+    font-weight: bold;
+    border-radius: 4px;
+}
 
 /* Today's date */
 .react-datepicker__day--today {
-    border: 2px solid #ffa600;
+    border: 2px solid #ffa600 !important;
+    color: #ffffff !important;
 }
 
-/* Hover effect */
-/* .react-datepicker__day:hover { */
-    /* background-color: #444; */
-    /* color: #fff; */
-/* } */
-
-/* ====== Fix for Hover Issue in Other Months ====== */
-/* .react-datepicker__day--in-range {
-    background-color: transparent !important;
-    color: inherit !important;
-} */
-
-/* .react-datepicker__day--in-selecting-range {
-    background-color: #5b6d7e !important;
-    color: white !important;
-} */
+/* ====== Hover Effect - Fixing the Hover Color ====== */
+.react-datepicker__day:hover {
+    background-color: #444c56 !important; /* Darker gray for hover effect */
+    color: #ffffff !important;
+    cursor: pointer;
+}
 
 /* ====== Date Input Styling ====== */
 .react-datepicker__input-container input {
     text-align: center;
     color: #fff;
     font-family: 'Inter', sans-serif;
-    font-weight: bold;
     background-color: #31363F;
+    border: 1px solid #444c56;
+    padding: 10px;
+    border-radius: 5px;
 }
