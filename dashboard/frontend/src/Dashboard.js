@@ -221,7 +221,7 @@ const Dashboard = () => {
                         fontSize: "14px"  // Standard font size
                     }}
                 />
-                    <span style={{ margin: "0 10px", color: "#fff", alignSelf: "center", fontSize: "18px", fontWeight: "bold" }}>to</span>                <DatePicker
+                    <span style={{ margin: "0 10px", color: "#fff", alignSelf: "center", fontSize: "18px"}}>to</span>                <DatePicker
                     selected={endDate}
                     onChange={date => setEndDate(date)}
                     selectsEnd
