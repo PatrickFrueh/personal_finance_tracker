@@ -56,6 +56,13 @@ const Dashboard = () => {
                     const { dataIndex } = tooltipModel.dataPoints[0];
                     const category = chartData.labels[dataIndex];
                     const categoryValue = chartData.datasets[0].data[dataIndex]; // Value for selected category
+
+                    // Shorten category name if it's too long
+                    let shortenedCategory = category;
+                    if (category.length > 15) {
+                        shortenedCategory = category.slice(0, 14) + ' ... '; // Truncate and add '...'
+                    }
+
                     setSelectedCategoryValue(categoryValue); // Update selected category value
 
                     const filteredTransactions = transactions.filter(
@@ -69,7 +76,7 @@ const Dashboard = () => {
                     const tooltipContent = (
                         <div className="custom-tooltip">
                             <div className="tooltip-header" style={{ fontWeight: "bold", fontSize: "18px"}}>
-                                {category} - {categoryValue.toFixed(2)}€
+                                {shortenedCategory}: {categoryValue.toFixed(2)}€
                             </div>
                             <div style={{ margin: "10px 0", borderTop: "2px solid #fff", height: "0px" }}></div> {/* Horizontal Line */}
                             <div className="tooltip-header">Top 5 Ausgaben:</div>
