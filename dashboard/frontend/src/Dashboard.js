@@ -10,27 +10,25 @@ import { useNavigate, useLocation } from 'react-router-dom';
 
 import "./index.css";
 import "./tooltip.css";
-import "./DatePicker.css"
+import "./DatePicker.css";
 
 // Register components
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 const Dashboard = () => {
-    // Get query params (startDate, endDate) from URL using useLocation
     const { search } = useLocation();
     const params = new URLSearchParams(search);
     const initialStartDate = params.get('startDate') ? new Date(params.get('startDate')) : new Date(getPreviousMonthDates().startDate);
     const initialEndDate = params.get('endDate') ? new Date(params.get('endDate')) : new Date(getPreviousMonthDates().endDate);
     
-    // State for storing chart data and selected date range
     const [chartData, setChartData] = useState({});
-    const [startDate, setStartDate] = useState(initialStartDate);  // Initialize with URL params or default
-    const [endDate, setEndDate] = useState(initialEndDate);  // Initialize with URL params or default
+    const [startDate, setStartDate] = useState(initialStartDate);  
+    const [endDate, setEndDate] = useState(initialEndDate);  
     const [transactions, setTransactions] = useState([]); 
-    const navigate = useNavigate();  // Initialize navigate function
+    const [selectedCategoryValue, setSelectedCategoryValue] = useState(null); // Store selected category value
+    const navigate = useNavigate();  
     
     const navigateToDetailsPage = (category) => {
-        // Navigate to the details page with the selected category and the current date range
         navigate(`/details/${category}?startDate=${startDate.toISOString()}&endDate=${endDate.toISOString()}`);
     };
 
@@ -57,6 +55,8 @@ const Dashboard = () => {
 
                     const { dataIndex } = tooltipModel.dataPoints[0];
                     const category = chartData.labels[dataIndex];
+                    const categoryValue = chartData.datasets[0].data[dataIndex]; // Value for selected category
+                    setSelectedCategoryValue(categoryValue); // Update selected category value
 
                     const filteredTransactions = transactions.filter(
                         (transaction) => transaction.kategorie === category
@@ -65,8 +65,13 @@ const Dashboard = () => {
                         .sort((a, b) => Math.abs(b.betrag) - Math.abs(a.betrag))
                         .slice(0, 5);
 
+                    // Tooltip content (category value + top 5 transactions)
                     const tooltipContent = (
                         <div className="custom-tooltip">
+                            <div className="tooltip-header" style={{ fontWeight: "bold", fontSize: "18px", alignSelf: "center"}}>
+                                {category} - {categoryValue.toFixed(2)}€
+                            </div>
+                            <div style={{ margin: "10px 0", borderTop: "2px solid #fff", height: "0px" }}></div> {/* Horizontal Line */}
                             <div className="tooltip-header">Top 5 Ausgaben:</div>
                             {top5Transactions.map((transaction, index) => (
                                 <div key={index} className="tooltip-row">
@@ -82,6 +87,7 @@ const Dashboard = () => {
                             ))}
                         </div>
                     );
+                    
 
                     const root = createRoot(tooltipEl);
                     root.render(tooltipContent);
@@ -97,7 +103,7 @@ const Dashboard = () => {
         },
         scales: {
             x: {
-                ticks: { color: "#ffffff", font: { family: "'Inter', sans-serif" } },
+                ticks: { color: "#ffffff", font: { family: "'Inter', sans-serif", weight: "bold"} },
                 grid: { color: "rgba(255, 255, 255, 0.2)" }
             },
             y: {
@@ -183,25 +189,10 @@ const Dashboard = () => {
         fetchData();
     }, [fetchData]);
 
-    // Function to remove the tooltip
-    const removeTooltip = () => {
-        const tooltipEl = document.getElementById('chartjs-tooltip');
-        if (tooltipEl) {
-            tooltipEl.style.opacity = 0;
-        }
-    };
-
-    // Cleanup tooltip on component unmount (or when navigating away)
-    useEffect(() => {
-        return () => {
-            removeTooltip();
-        };
-    }, []);
-
     return (
-        <div style={{ width: "1000px", height: "570px", margin: "auto", padding: "20px", border: "1px solid rgb(67, 76, 88)", borderRadius: "10px", boxShadow: "2px 2px 10px rgba(0,0,0,0.1)", boxSizing: "border-box", display: "flex", flexDirection: "column", overflow: "hidden", backgroundColor: "#31363F" }}>
+        <div style={{ width: "1000px", height: "650px", margin: "auto", padding: "20px", border: "1px solid rgb(67, 76, 88)", borderRadius: "10px", boxShadow: "2px 2px 10px rgba(0,0,0,0.1)", boxSizing: "border-box", display: "flex", flexDirection: "column", overflow: "hidden", backgroundColor: "#31363F" }}>
             <div style={{ display: "flex", justifyContent: "center", marginBottom: "20px" }}>
-            <DatePicker
+                <DatePicker
                     selected={startDate}
                     onChange={date => setStartDate(date)}
                     selectsStart
@@ -209,9 +200,10 @@ const Dashboard = () => {
                     endDate={endDate}
                     dateFormat="dd-MM-yyyy"
                     placeholderText="Start Date"
-                    className="date-picker" // Make sure your 'date-picker' class has the correct styles in CSS
+                    className="date-picker" 
                 />
-                    <span style={{ margin: "0 15px", color: "#fff", alignSelf: "center", fontSize: "18px"}}>bis</span>                <DatePicker
+                <span style={{ margin: "0 15px", color: "#fff", alignSelf: "center", fontSize: "18px"}}>bis</span>                
+                <DatePicker
                     selected={endDate}
                     onChange={date => setEndDate(date)}
                     selectsEnd
