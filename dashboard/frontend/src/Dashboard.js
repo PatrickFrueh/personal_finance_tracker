@@ -184,7 +184,7 @@ const Dashboard = () => {
                     {
                         label: "Spending by Category",
                         data: sortedAmounts,
-                        backgroundColor: ["#ffa600","#003f5c","#ff6361", "#58508d","#bc5090"]
+                        backgroundColor: ["#993d3d","#5c4469","#e7d2c0", "#ec8b29","#6d5849"]
                     }
                 ]
             });
