@@ -68,7 +68,7 @@ const Dashboard = () => {
                     // Tooltip content (category value + top 5 transactions)
                     const tooltipContent = (
                         <div className="custom-tooltip">
-                            <div className="tooltip-header" style={{ fontWeight: "bold", fontSize: "18px", alignSelf: "center"}}>
+                            <div className="tooltip-header" style={{ fontWeight: "bold", fontSize: "18px"}}>
                                 {category} - {categoryValue.toFixed(2)}€
                             </div>
                             <div style={{ margin: "10px 0", borderTop: "2px solid #fff", height: "0px" }}></div> {/* Horizontal Line */}
