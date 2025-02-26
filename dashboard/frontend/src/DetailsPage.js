@@ -1,26 +1,29 @@
-import React, { useState, useEffect, useMemo } from "react";  // Ensure hooks are imported
-import { useParams, useLocation, useNavigate } from 'react-router-dom';  // To access the category, query params and navigate
+import React, { useState, useEffect, useMemo } from "react";
+import { useParams, useLocation, useNavigate } from 'react-router-dom'; 
 import axios from 'axios';
+import { Pie } from 'react-chartjs-2';
+import { Chart as ChartJS, CategoryScale, LinearScale, ArcElement, Tooltip, Legend } from 'chart.js';
+
+ChartJS.register(CategoryScale, LinearScale, ArcElement, Tooltip, Legend);
 
 const DetailsPage = () => {
-    const { category } = useParams();  // Get the category from the URL
-    const { search } = useLocation();  // Get the query parameters (start and end date)
-    const navigate = useNavigate();  // To navigate programmatically
+    const { category } = useParams();
+    const { search } = useLocation();
+    const navigate = useNavigate();
 
-    // Extract start and end dates from query params using useMemo
     const startDate = useMemo(() => {
         const params = new URLSearchParams(search);
         return new Date(params.get('startDate'));
-    }, [search]);  // Recompute only when `search` changes
+    }, [search]);
     
     const endDate = useMemo(() => {
         const params = new URLSearchParams(search);
         return new Date(params.get('endDate'));
-    }, [search]);  // Recompute only when `search` changes
+    }, [search]);
     
     const [transactions, setTransactions] = useState([]);
+    const [pieChartData, setPieChartData] = useState({});
 
-    // Fetch data for the selected category and date range
     useEffect(() => {
         axios.get("http://localhost:5000/api/spending-categories", {
             params: {
@@ -29,36 +32,121 @@ const DetailsPage = () => {
             }
         })
         .then(response => {
-            // Filter transactions for the selected category
             const filteredTransactions = response.data.transactions.filter(transaction => {
                 return transaction.kategorie === category;
             });
 
             setTransactions(filteredTransactions);
+
+            const categoryAggregates = {};
+            filteredTransactions.forEach(transaction => {
+                const transactionCategory = transaction.kategorie;
+                if (categoryAggregates[transactionCategory]) {
+                    categoryAggregates[transactionCategory] += Math.abs(transaction.betrag);
+                } else {
+                    categoryAggregates[transactionCategory] = Math.abs(transaction.betrag);
+                }
+            });
+
+            const categories = Object.keys(categoryAggregates);
+            const amounts = Object.values(categoryAggregates);
+
+            setPieChartData({
+                labels: categories,
+                datasets: [
+                    {
+                        data: amounts,
+                        backgroundColor: ["#993d3d","#5c4469","#e7d2c0", "#ec8b29","#6d5849"],
+                    },
+                ],
+            });
         })
         .catch(error => console.error(error));
-    }, [category, startDate, endDate]);  // Only run when category, startDate, or endDate change
+    }, [category, startDate, endDate]);
 
-    // Back button handler: Navigate to the previous page while keeping the current date range
     const handleGoBack = () => {
         navigate({
-            pathname: '/',  // Redirect back to Dashboard (or wherever you want)
-            search: `?startDate=${startDate.toISOString().split('T')[0]}&endDate=${endDate.toISOString().split('T')[0]}`,  // Keep the same date interval
+            pathname: '/',
+            search: `?startDate=${startDate.toISOString().split('T')[0]}&endDate=${endDate.toISOString().split('T')[0]}`,
         });
     };
 
+    const formatDate = (date) => {
+        const options = { month: 'short', day: '2-digit' };
+        return new Intl.DateTimeFormat('en-US', options).format(date);
+    };
+
     return (
-        <div>
-            <h1>{category} - Transactions from {startDate.toDateString()} to {endDate.toDateString()}</h1>
-            <ul>
-                {transactions.map(transaction => (
-                    <li key={transaction.id}>
-                        {transaction.auftraggeber_empfaenger}: {Math.abs(transaction.betrag).toFixed(2)}€
-                    </li>
-                ))}
-            </ul>
-            {/* Button to go back to the Dashboard with the same interval */}
-            <button onClick={handleGoBack}>Back to Dashboard</button>
+        <div style={{
+            padding: "20px",
+            backgroundColor: "#31363F",
+            color: "#fff",
+            width: "80%",
+            margin: "auto",
+            border: "1px solid rgb(67, 76, 88)",
+            borderRadius: "10px",
+            boxShadow: "2px 2px 10px rgba(0,0,0,0.1)",
+            boxSizing: "border-box",
+            overflow: "hidden"
+        }}>
+            {/* Header Section */}
+            <div style={{ marginBottom: "20px" }}>
+                <h1>
+                    {category} 
+                    <span style={{ marginLeft: "10px", fontSize: "18px", color: "#e7d2c0" }}>
+                        | {formatDate(startDate)} to {formatDate(endDate)}
+                    </span>
+                </h1>
+            </div>
+            
+            {/* Header Line */}
+            <hr style={{ border: "1px solid #fff", marginBottom: "20px" }} />
+
+            {/* Content Section */}
+            <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
+                {/* Transactions List */}
+                <div style={{ flex: 1, marginRight: "20px" }}>
+                    <h2>Transactions</h2>
+                    <ul>
+                        {transactions.map((transaction) => (
+                            <li key={transaction.id} style={{ marginBottom: "10px" }}>
+                                <strong>{transaction.auftraggeber_empfaenger}</strong>: {Math.abs(transaction.betrag).toFixed(2)}€
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+
+                {/* Pie Chart Section */}
+                <div style={{ width: "200px", height: "200px", marginTop: "20px" }}>
+                    {pieChartData.labels ? (
+                        <Pie data={pieChartData} options={{
+                            responsive: true,
+                            plugins: {
+                                tooltip: {
+                                    callbacks: {
+                                        label: (tooltipItem) => {
+                                            return `${tooltipItem.label}: ${tooltipItem.raw.toFixed(2)}€`;
+                                        }
+                                    }
+                                }
+                            }
+                        }} />
+                    ) : <p>Loading Pie Chart...</p>}
+                </div>
+            </div>
+
+            {/* Back Button */}
+            <div style={{ marginTop: "20px" }}>
+                <button onClick={handleGoBack} style={{
+                    padding: "10px", 
+                    backgroundColor: "#e7d2c0", 
+                    color: "#31363F", 
+                    border: "none", 
+                    borderRadius: "5px"
+                }}>
+                    Back to Dashboard
+                </button>
+            </div>
         </div>
     );
 };
