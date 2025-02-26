@@ -194,6 +194,14 @@ const Dashboard = () => {
 
     useEffect(() => {
         fetchData();
+        
+        // Cleanup the tooltip when the component unmounts
+        return () => {
+            const tooltipEl = document.getElementById('chartjs-tooltip');
+            if (tooltipEl) {
+                tooltipEl.remove(); // Remove tooltip from DOM
+            }
+        };
     }, [fetchData]);
 
     return (
