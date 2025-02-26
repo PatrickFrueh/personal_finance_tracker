@@ -21,7 +21,8 @@ const DetailsPage = () => {
         return new Date(params.get('endDate'));
     }, [search]);
     
-    const categoryColor = decodeURIComponent(new URLSearchParams(search).get('color') || '#000');    const [transactions, setTransactions] = useState([]);
+    const categoryColor = decodeURIComponent(new URLSearchParams(search).get('color') || '#000');    
+    const [transactions, setTransactions] = useState([]);
     const [pieChartData, setPieChartData] = useState({});
 
     useEffect(() => {
@@ -91,18 +92,17 @@ const DetailsPage = () => {
         }}>
             {/* Header Section */}
             <div style={{ marginBottom: "20px" }}>
-            <h1 style={{ textAlign: 'center' }}>
-                Transaktionen für <span style={{  fontWeight: 'bold', color: categoryColor, textShadow: '-1px -1px 0 #222831, 1px -1px 0 #222831, -1px 1px 0 #222831, 1px 1px 0 #222831'}}> {category} </span>
-                <span>im Zeitraum [{formatDate(startDate)} bis {formatDate(endDate)}]
-                </span>
-            </h1>
+                <h1 style={{ textAlign: 'center' }}>
+                    Transaktionen für <span style={{ fontWeight: 'bold', color: categoryColor, textShadow: '-1px -1px 0 #222831, 1px -1px 0 #222831, -1px 1px 0 #222831, 1px 1px 0 #222831' }}> {category} </span>
+                    <span>im Zeitraum [{formatDate(startDate)} bis {formatDate(endDate)}]</span>
+                </h1>
             </div>
             
             {/* Header Line */}
             <hr style={{ border: "1px solid #fff", marginBottom: "20px" }} />
 
             {/* Content Section */}
-            <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
+            <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
                 {/* Transactions List */}
                 <div style={{ flex: 1, marginRight: "20px" }}>
                     <ul>
@@ -115,7 +115,14 @@ const DetailsPage = () => {
                 </div>
 
                 {/* Pie Chart Section */}
-                <div style={{ width: "200px", height: "200px", marginTop: "20px" }}>
+                <div style={{
+                    width: "200px", 
+                    height: "200px", 
+                    marginTop: "20px", 
+                    display: "flex", 
+                    justifyContent: "center",
+                    alignItems: "center"
+                }}>
                     {pieChartData.labels ? (
                         <Pie data={pieChartData} options={{
                             responsive: true,
