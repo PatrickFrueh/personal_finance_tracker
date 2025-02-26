@@ -28,10 +28,12 @@ const Dashboard = () => {
     const [selectedCategoryValue, setSelectedCategoryValue] = useState(null); // Store selected category value
     const navigate = useNavigate();  
     
-    const navigateToDetailsPage = (category) => {
-        navigate(`/details/${category}?startDate=${startDate.toISOString()}&endDate=${endDate.toISOString()}`);
+    const navigateToDetailsPage = (category, categoryColor) => {
+        // URL-encode the color before passing it to the URL
+        const encodedColor = encodeURIComponent(categoryColor);
+        navigate(`/details/${category}?startDate=${startDate.toISOString()}&endDate=${endDate.toISOString()}&color=${encodedColor}`);
     };
-
+    
     const options = {
         plugins: {
             legend: { display: false },
@@ -129,7 +131,8 @@ const Dashboard = () => {
                 const element = elements[0];
                 const categoryIndex = element.index;
                 const category = chartData.labels[categoryIndex];
-                navigateToDetailsPage(category);
+                const categoryColor = chartData.datasets[0].backgroundColor[categoryIndex]; // Get the color of the clicked bar
+                navigateToDetailsPage(category, categoryColor);  // Pass category and color to the details page
             }
         }
     };

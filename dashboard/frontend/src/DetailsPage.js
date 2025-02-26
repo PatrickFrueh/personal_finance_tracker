@@ -21,7 +21,7 @@ const DetailsPage = () => {
         return new Date(params.get('endDate'));
     }, [search]);
     
-    const [transactions, setTransactions] = useState([]);
+    const categoryColor = decodeURIComponent(new URLSearchParams(search).get('color') || '#000');    const [transactions, setTransactions] = useState([]);
     const [pieChartData, setPieChartData] = useState({});
 
     useEffect(() => {
@@ -73,7 +73,7 @@ const DetailsPage = () => {
 
     const formatDate = (date) => {
         const options = { month: 'short', day: '2-digit' };
-        return new Intl.DateTimeFormat('en-US', options).format(date);
+        return new Intl.DateTimeFormat('de-DE', options).format(date);
     };
 
     return (
@@ -91,12 +91,11 @@ const DetailsPage = () => {
         }}>
             {/* Header Section */}
             <div style={{ marginBottom: "20px" }}>
-                <h1>
-                    {category} 
-                    <span style={{ marginLeft: "10px", fontSize: "18px", color: "#e7d2c0" }}>
-                        | {formatDate(startDate)} to {formatDate(endDate)}
-                    </span>
-                </h1>
+            <h1 style={{ textAlign: 'center' }}>
+                Transaktionen für <span style={{  fontWeight: 'bold', color: categoryColor, textShadow: '-1px -1px 0 #222831, 1px -1px 0 #222831, -1px 1px 0 #222831, 1px 1px 0 #222831'}}> {category} </span>
+                <span>im Zeitraum [{formatDate(startDate)} bis {formatDate(endDate)}]
+                </span>
+            </h1>
             </div>
             
             {/* Header Line */}
@@ -106,7 +105,6 @@ const DetailsPage = () => {
             <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
                 {/* Transactions List */}
                 <div style={{ flex: 1, marginRight: "20px" }}>
-                    <h2>Transactions</h2>
                     <ul>
                         {transactions.map((transaction) => (
                             <li key={transaction.id} style={{ marginBottom: "10px" }}>
