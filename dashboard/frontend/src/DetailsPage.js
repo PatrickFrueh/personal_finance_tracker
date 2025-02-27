@@ -33,37 +33,48 @@ const DetailsPage = () => {
             }
         })
         .then(response => {
-            const filteredTransactions = response.data.transactions.filter(transaction => {
-                return transaction.kategorie === category;
-            });
-
+            // Filter transactions based on the category passed via URL params
+            const filteredTransactions = response.data.transactions.filter(transaction => 
+                transaction.kategorie === category
+            );
+    
+            // Set filtered transactions to the state
             setTransactions(filteredTransactions);
-
-            const categoryAggregates = {};
+    
+            // Aggregate the amounts by each sender/receiver (auftraggeber_empfaenger)
+            const transactionAggregates = {};
             filteredTransactions.forEach(transaction => {
-                const transactionCategory = transaction.kategorie;
-                if (categoryAggregates[transactionCategory]) {
-                    categoryAggregates[transactionCategory] += Math.abs(transaction.betrag);
+                const senderReceiver = transaction.auftraggeber_empfaenger;
+                if (transactionAggregates[senderReceiver]) {
+                    // Add the amount for the existing sender/receiver
+                    transactionAggregates[senderReceiver] += Math.abs(transaction.betrag);
                 } else {
-                    categoryAggregates[transactionCategory] = Math.abs(transaction.betrag);
+                    // Initialize the amount for this new sender/receiver
+                    transactionAggregates[senderReceiver] = Math.abs(transaction.betrag);
                 }
             });
-
-            const categories = Object.keys(categoryAggregates);
-            const amounts = Object.values(categoryAggregates);
-
+    
+            // Extract the labels (unique sender/receiver) and corresponding amounts for the pie chart
+            const labels = Object.keys(transactionAggregates); // Sender/Receiver names
+            const amounts = Object.values(transactionAggregates); // Corresponding transaction amounts
+    
+            // Pie chart colors (adjust this as needed to match your design)
+            const colors = ["#993d3d", "#5c4469", "#e7d2c0", "#ec8b29", "#6d5849", "#ff7f50", "#4682b4"];
+    
+            // Update pie chart data state with new labels, amounts, and colors
             setPieChartData({
-                labels: categories,
+                labels: labels, // Array of unique transaction senders/receivers
                 datasets: [
                     {
-                        data: amounts,
-                        backgroundColor: ["#993d3d","#5c4469","#e7d2c0", "#ec8b29","#6d5849"],
+                        data: amounts, // Array of amounts corresponding to each label
+                        backgroundColor: colors.slice(0, labels.length), // Slice colors dynamically based on the number of slices
                     },
                 ],
             });
         })
         .catch(error => console.error(error));
     }, [category, startDate, endDate]);
+    
 
     const handleGoBack = () => {
         navigate({
