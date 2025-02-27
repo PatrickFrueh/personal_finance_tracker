@@ -68,6 +68,13 @@ const DetailsPage = () => {
         .catch(error => console.error(error));
     }, [category, startDate, endDate]);
 
+    const handleGoBack = () => {
+        navigate({
+            pathname: '/',
+            search: `?startDate=${startDate.toISOString().split('T')[0]}&endDate=${endDate.toISOString().split('T')[0]}`,
+        });
+    };
+
     const formatDate = (date) => {
         const options = { month: 'short', day: '2-digit' };
         return new Intl.DateTimeFormat('de-DE', options).format(date);
@@ -155,6 +162,33 @@ const DetailsPage = () => {
                         />         
                     ) : <p>Loading Pie Chart...</p>}
                 </div>
+            </div>
+
+            {/* Back Button */}
+            <div style={{ marginTop: "20px" }}>
+                <button onClick={handleGoBack} style={{
+                    padding: "10px", 
+                    backgroundColor: "#31363f", 
+                    color: "#fff", 
+                    border: "solid",
+                    borderWidth: "1px",
+                    borderRadius: "100px", 
+                    fontSize: "16px", // Slightly larger text for readability
+                    cursor: "pointer",
+                    transition: "all 0.3s ease-in-out", // Smooth transition for hover effect
+                    boxShadow: "0 4px 6px rgba(0,0,0,0.1)", // Subtle shadow for depth
+                    display: "flex", 
+                    alignItems: "center", 
+                    justifyContent: "center", 
+                    position: "relative", 
+                    width: "120px" // Adjust width as needed
+                }}
+                    onMouseEnter={(e) => e.target.style.boxShadow = "0 6px 18px rgba(0, 0, 0, 0.48)"} // Hover shadow
+                    onMouseLeave={(e) => e.target.style.boxShadow = "0 4px 6px rgba(0, 0, 0, 0.38)"}
+                    >
+                    <span style={{ position: "absolute", left: "10px" }}>{"<"}</span>
+                    <span>{"Back"}</span>
+                </button>
             </div>
         </div>
     );
