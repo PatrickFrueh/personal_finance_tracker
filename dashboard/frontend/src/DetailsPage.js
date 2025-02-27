@@ -152,9 +152,12 @@ const DetailsPage = () => {
                                     const truncatedLabel = senderReceiver.slice(0, 2).join(' '); // Get first two words
                         
                                     // Return the formatted tooltip: 'Sender/Receiver: amount'
-                                    return `${truncatedLabel}: ${tooltipItem.raw.toFixed(2)}€`;
-                                    }
-                                }
+                                    return `   ${truncatedLabel}: ${tooltipItem.raw.toFixed(2)}€`;
+                                    },
+                                title: () => ''
+                                },
+                                // enabled: true,
+                                usePointStyle: true,
                                 },
                                 legend: {
                                 display: false, // Hide the legend (the labels with colors)
