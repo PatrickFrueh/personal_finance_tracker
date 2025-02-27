@@ -102,9 +102,14 @@ const DetailsPage = () => {
             <hr style={{ border: "1px solid #fff", marginBottom: "20px" }} />
 
             {/* Content Section */}
-            <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+            <div style={{ 
+                display: "flex", 
+                flexDirection: "row", 
+                justifyContent: "space-between", 
+                alignItems: "center"
+            }}>
                 {/* Transactions List */}
-                <div style={{ flex: 1, marginRight: "20px" }}>
+                <div style={{ flex: 1, display: "flex", justifyContent: "flex-end", paddingRight: "20px" }}>
                     <ul>
                         {transactions.map((transaction) => (
                             <li key={transaction.id} style={{ marginBottom: "10px" }}>
@@ -114,14 +119,12 @@ const DetailsPage = () => {
                     </ul>
                 </div>
 
-                {/* Pie Chart Section */}
+                {/* Pie Chart Section - Centering within its half */}
                 <div style={{
-                    width: "200px", 
-                    height: "200px", 
-                    marginTop: "20px", 
+                    flex: 1,  
                     display: "flex", 
-                    justifyContent: "center",
-                    alignItems: "center"
+                    justifyContent: "center", // Centers the pie chart horizontally
+                    alignItems: "center", // Centers the pie chart vertically
                 }}>
                     {pieChartData.labels ? (
                         <Pie data={pieChartData} options={{
@@ -139,6 +142,7 @@ const DetailsPage = () => {
                     ) : <p>Loading Pie Chart...</p>}
                 </div>
             </div>
+
 
             {/* Back Button */}
             <div style={{ marginTop: "20px" }}>
