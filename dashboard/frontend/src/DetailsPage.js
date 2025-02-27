@@ -73,8 +73,7 @@ const DetailsPage = () => {
             });
         })
         .catch(error => console.error(error));
-    }, [category, startDate, endDate]);
-    
+    }, [category, startDate, endDate]);    
 
     const handleGoBack = () => {
         navigate({
@@ -132,24 +131,37 @@ const DetailsPage = () => {
 
                 {/* Pie Chart Section - Centering within its half */}
                 <div style={{
-                    flex: 1,  
+                    flex: 1,
+                    height: "250px",  
                     display: "flex", 
                     justifyContent: "center", // Centers the pie chart horizontally
                     alignItems: "center", // Centers the pie chart vertically
                 }}>
                     {pieChartData.labels ? (
-                        <Pie data={pieChartData} options={{
+                        <Pie
+                            data={pieChartData}
+                            options={{
                             responsive: true,
                             plugins: {
                                 tooltip: {
-                                    callbacks: {
-                                        label: (tooltipItem) => {
-                                            return `${tooltipItem.label}: ${tooltipItem.raw.toFixed(2)}€`;
-                                        }
+                                callbacks: {
+                                    // Format the tooltip content
+                                    label: (tooltipItem) => {
+                                    // Split the sender/receiver name and pick the first two words
+                                    const senderReceiver = tooltipItem.label.split(' ');
+                                    const truncatedLabel = senderReceiver.slice(0, 2).join(' '); // Get first two words
+                        
+                                    // Return the formatted tooltip: 'Sender/Receiver: amount'
+                                    return `${truncatedLabel}: ${tooltipItem.raw.toFixed(2)}€`;
                                     }
                                 }
+                                },
+                                legend: {
+                                display: false, // Hide the legend (the labels with colors)
+                                }
                             }
-                        }} />
+                            }}
+                        />         
                     ) : <p>Loading Pie Chart...</p>}
                 </div>
             </div>
