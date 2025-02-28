@@ -103,25 +103,21 @@ const DetailsPage = () => {
             <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
                 <div style={{ flex: 1, display: "flex", justifyContent: "flex-end", paddingRight: "20px" }}>
                     <ul>
-                        {
-                        transactions.map((transaction) => {
-                            // Check if the current transaction is the same as the hovered slice
-                            const isHovered = hoveredSlice && hoveredSlice === transaction.auftraggeber_empfaenger;
-
+                        {transactions.map((transaction) => {
+                            const isHovered = hoveredSlice === transaction.auftraggeber_empfaenger;
                             return (
-                            <li
-                                key={transaction.id}
-                                style={{
-                                marginBottom: "10px",
-                                opacity: isHovered || hoveredSlice === null ? 1 : 0.3, // Default to opacity 1 if no hover, else 0.3 for others
-                                transition: "opacity 0.3s ease",
-                                }}
-                            >
-                                <strong>{transaction.auftraggeber_empfaenger}</strong>: {Math.abs(transaction.betrag).toFixed(2)}€
-                            </li>
+                                <li
+                                    key={transaction.id}
+                                    style={{
+                                        marginBottom: "10px",
+                                        opacity: hoveredSlice ? (isHovered ? 1 : 0.3) : 1, 
+                                        transition: "opacity 0.3s ease",
+                                    }}
+                                >
+                                    <strong>{transaction.auftraggeber_empfaenger}</strong>: {Math.abs(transaction.betrag).toFixed(2)}€
+                                </li>
                             );
-                        })
-                        }
+                        })}
                     </ul>
                 </div>
                 {/* Pie Chart Section - Centering within its half */}
@@ -136,30 +132,33 @@ const DetailsPage = () => {
                         <Pie
                             data={pieChartData}
                             options={{
-                            responsive: true,
-                            plugins: {
-                                tooltip: {
-                                callbacks: {
-                                    // Format the tooltip content
-                                    label: (tooltipItem) => {
-                                    // Split the sender/receiver name and pick the first two words
-                                    const senderReceiver = tooltipItem.label.split(' ');
-                                    const truncatedLabel = senderReceiver.slice(0, 2).join(' '); // Get first two words
-                        
-                                    // Return the formatted tooltip: 'Sender/Receiver: amount'
-                                    return `   ${truncatedLabel}: ${tooltipItem.raw.toFixed(2)}€`;
+                                responsive: true,
+                                plugins: {
+                                    tooltip: {
+                                        callbacks: {
+                                            label: (tooltipItem) => {
+                                                const senderReceiver = tooltipItem.label.split(' ');
+                                                const truncatedLabel = senderReceiver.slice(0, 2).join(' '); 
+                                                return `   ${truncatedLabel}: ${tooltipItem.raw.toFixed(2)}€`;
+                                            },
+                                            title: () => ''
+                                        },
+                                        usePointStyle: true,
                                     },
-                                title: () => ''
+                                    legend: {
+                                        display: false,
+                                    }
                                 },
-                                // enabled: true,
-                                usePointStyle: true,
-                                },
-                                legend: {
-                                display: false, // Hide the legend (the labels with colors)
+                                onHover: (event, elements) => {
+                                    if (elements.length > 0) {
+                                        const index = elements[0].index;
+                                        setHoveredSlice(pieChartData.labels[index]); 
+                                    } else {
+                                        setHoveredSlice(null);
+                                    }
                                 }
-                            }
                             }}
-                        />         
+                        />                       
                     ) : <p>Loading Pie Chart...</p>}
                 </div>
             </div>
