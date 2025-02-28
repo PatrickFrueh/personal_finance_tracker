@@ -46,6 +46,7 @@
 
 </details>
 
+<br>
 <details open>
 <summary>🔄 Transform: Categorize Data</summary>
 
@@ -73,6 +74,7 @@
 
 </details>
 
+<br>
 <details open>
 <summary>💾 Load: Store Data in Local Database</summary>
 
@@ -83,6 +85,7 @@
 
 </details>
 
+<br>
 <details open>
 <summary>📊 Visualize: Reports & Spending Insights</summary>
 
