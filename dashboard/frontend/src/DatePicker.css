@@ -57,14 +57,14 @@
 
 /* ====== Today's Date Styling ====== */
 .react-datepicker__day--today {
-    border: 2px solid #2fbb4f !important; /* Green border for today's date */
+    border: 2px solid #2f44bb !important; /* Green border for today's date */
     color: #ffffff !important; /* White text */
     transition: background-color 0.5s ease-in-out, color 0.5s ease-in-out;
 }
 
 /* ====== Hover Effect Styling for Normal Days ====== */
 .react-datepicker__day:hover {
-    background-color: #2fbb4f !important; /* Hover color for days */
+    background-color: #2f44bb !important; /* Hover color for days */
     color: white !important;
     cursor: pointer; /* Pointer cursor on hover */
 }
